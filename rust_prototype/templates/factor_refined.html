@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="factor-layout">
+  <aside class="factor-sidebar">
+    <div class="sidebar-title">The Twelve Factors</div>
+    <ol>
+      <li><a href="/codebase" {% if factor_slug == "codebase" %}class="active"{% endif %}>I. Codebase</a></li>
+      <li><a href="/dependencies" {% if factor_slug == "dependencies" %}class="active"{% endif %}>II. Dependencies</a></li>
+      <li><a href="/config" {% if factor_slug == "config" %}class="active"{% endif %}>III. Config</a></li>
+      <li><a href="/backing-services" {% if factor_slug == "backing-services" %}class="active"{% endif %}>IV. Backing services</a></li>
+      <li><a href="/build-release-run" {% if factor_slug == "build-release-run" %}class="active"{% endif %}>V. Build, release, run</a></li>
+      <li><a href="/processes" {% if factor_slug == "processes" %}class="active"{% endif %}>VI. Processes</a></li>
+      <li><a href="/port-binding" {% if factor_slug == "port-binding" %}class="active"{% endif %}>VII. Port binding</a></li>
+      <li><a href="/concurrency" {% if factor_slug == "concurrency" %}class="active"{% endif %}>VIII. Concurrency</a></li>
+      <li><a href="/disposability" {% if factor_slug == "disposability" %}class="active"{% endif %}>IX. Disposability</a></li>
+      <li><a href="/dev-prod-parity" {% if factor_slug == "dev-prod-parity" %}class="active"{% endif %}>X. Dev/prod parity</a></li>
+      <li><a href="/logs" {% if factor_slug == "logs" %}class="active"{% endif %}>XI. Logs</a></li>
+      <li><a href="/admin-processes" {% if factor_slug == "admin-processes" %}class="active"{% endif %}>XII. Admin processes</a></li>
+    </ol>
+  </aside>
+
+  <main class="factor-content">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> / <a href="/#the-twelve-factors">The Twelve Factors</a> / {{ factor_title }}
+    </nav>
+    
+    <h1>{{ factor_roman }}. {{ factor_title }}</h1>
+    <p class="subtitle">{{ factor_subtitle }}</p>
+    
+    <article>
+      {{ content | safe }}
+    </article>
+    
+    <div class="factor-cta">
+      <strong>Help evolve this factor</strong>
+      <p>Have ideas or feedback about this factor? Join the discussion and contribute to the evolution of the twelve-factor methodology.</p>
+      <a href="https://github.com/heroku/12factor/issues" class="btn">Join Discussion on GitHub</a>
+    </div>
+    
+    <nav class="factor-nav" aria-label="Factor navigation">
+      <div class="nav-wrapper">
+        {% if prev_factor %}
+        <a href="/{{ prev_factor.slug }}" class="nav-prev">
+          ← {{ prev_factor.title }}
+        </a>
+        {% endif %}
+        {% if next_factor %}
+        <a href="/{{ next_factor.slug }}" class="nav-next">
+          {{ next_factor.title }} →
+        </a>
+        {% endif %}
+      </div>
+    </nav>
+  </main>
+</div>
+{% endblock content %}

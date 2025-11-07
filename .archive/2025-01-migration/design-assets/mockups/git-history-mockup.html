@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git History Integration Mockup</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #fafafa;
+        }
+        
+        /* Factor Card Mockup */
+        .factor-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .factor-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .factor-number {
+            width: 48px;
+            height: 48px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .git-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .last-updated {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .git-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.5;
+        }
+        
+        .update-time {
+            color: #0cce6b;
+            font-weight: 500;
+        }
+        
+        .update-time.stale {
+            color: #666;
+        }
+        
+        .update-time.recent {
+            color: #0cce6b;
+        }
+        
+        .contributors {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .contributor-avatars {
+            display: flex;
+            margin-left: 0.5rem;
+        }
+        
+        .contributor-avatars img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-left: -8px;
+        }
+        
+        .contributor-avatars img:first-child {
+            margin-left: 0;
+        }
+        
+        /* Status badge */
+        .status-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 20px;
+            text-transform: uppercase;
+            background: #0cce6b;
+            color: white;
+        }
+        
+        .mockup-section {
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .description {
+            background: #fff9e6;
+            border: 1px solid #ffd700;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Git History Integration Mockup</h1>
+    <div style="background: #f0f8ff; border: 2px solid #0066cc; border-radius: 8px; padding: 1rem; margin-bottom: 2rem;">
+        <h3 style="margin-top: 0; color: #0066cc;">Decision Framework</h3>
+        <p style="margin-bottom: 0.5rem;"><strong>Choose Option 1</strong> if you want: Maximum transparency, immediate visibility of activity, social proof on homepage</p>
+        <p style="margin-bottom: 0.5rem;"><strong>Choose Option 2</strong> if you want: Clean factor cards, centralized activity feed, blog-like recent updates</p>
+        <p style="margin-bottom: 0;"><strong>Choose Option 3</strong> if you want: Minimal homepage changes, detailed history for engaged users, progressive disclosure</p>
+    </div>
+    
+    <div class="mockup-section">
+        <h2>Option 1: Inline Git Info on Factor Cards</h2>
+        <div class="description">
+            Shows last update time and recent contributors directly on each factor card.
+            <div style="margin-top: 0.5rem; padding: 0.5rem; background: #e8f4f8; border-left: 3px solid #0cce6b;">
+                <strong>Key differences:</strong>
+                <ul style="margin: 0.5rem 0 0; padding-left: 1.5rem;">
+                    <li>Git info appears <strong>directly on homepage</strong> factor cards</li>
+                    <li>Shows <strong>contributor avatars</strong> for social proof</li>
+                    <li>Displays <strong>relative time</strong> (e.g., "2 weeks ago")</li>
+                    <li>Visual <strong>status badges</strong> (UPDATED) for recently changed factors</li>
+                    <li>Most <strong>information-dense</strong> approach</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="factor-card">
+            <span class="status-badge">UPDATED</span>
+            <div class="factor-header">
+                <div class="factor-number">III</div>
+                <div>
+                    <h3>Config</h3>
+                    <p>Store config in the environment</p>
+                </div>
+            </div>
+            <div class="git-info">
+                <div class="last-updated">
+                    <svg class="git-icon" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25zM4.25 12a.75.75 0 100 1.5.75.75 0 000-1.5zM3.5 3.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0z"/>
+                    </svg>
+                    Last updated <span class="update-time recent">2 weeks ago</span>
+                </div>
+                <div class="contributors">
+                    by
+                    <div class="contributor-avatars">
+                        <img src="https://github.com/github.png" alt="Contributor" title="@username">
+                        <img src="https://github.com/github.png" alt="Contributor" title="@username">
+                        <img src="https://github.com/github.png" alt="Contributor" title="@username">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="factor-card">
+            <div class="factor-header">
+                <div class="factor-number">I</div>
+                <div>
+                    <h3>Codebase</h3>
+                    <p>One codebase tracked in revision control, many deploys</p>
+                </div>
+            </div>
+            <div class="git-info">
+                <div class="last-updated">
+                    <svg class="git-icon" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25zM4.25 12a.75.75 0 100 1.5.75.75 0 000-1.5zM3.5 3.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0z"/>
+                    </svg>
+                    Last updated <span class="update-time stale">13 years ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mockup-section">
+        <h2>Option 2: Separate Git Activity Section</h2>
+        <div class="description">
+            A dedicated section showing recent commit activity across all factors.
+            <div style="margin-top: 0.5rem; padding: 0.5rem; background: #e8f4f8; border-left: 3px solid #0cce6b;">
+                <strong>Key differences:</strong>
+                <ul style="margin: 0.5rem 0 0; padding-left: 1.5rem;">
+                    <li>Creates a <strong>separate "Recent Updates" section</strong> on homepage</li>
+                    <li>Shows <strong>chronological timeline</strong> of changes</li>
+                    <li>Includes <strong>commit messages</strong> for context</li>
+                    <li>Less visual clutter on factor cards</li>
+                    <li>Better for <strong>scanning recent activity</strong> at a glance</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 1.5rem;">
+            <h3 style="margin-top: 0;">Recent Updates</h3>
+            <div style="border-left: 3px solid #e5e5e5; padding-left: 1rem;">
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-weight: 500;">Config factor updated</div>
+                    <div style="font-size: 0.875rem; color: #666;">Added environment variable best practices • 2 weeks ago by @contributor</div>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-weight: 500;">Dependencies factor updated</div>
+                    <div style="font-size: 0.875rem; color: #666;">Clarified container considerations • 1 month ago by @maintainer</div>
+                </div>
+                <div>
+                    <div style="font-weight: 500;">Port binding factor updated</div>
+                    <div style="font-size: 0.875rem; color: #666;">Added WebSocket examples • 2 months ago by @contributor</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mockup-section">
+        <h2>Option 3: Factor Page Enhancement</h2>
+        <div class="description">
+            Shows detailed git history on individual factor pages.
+            <div style="margin-top: 0.5rem; padding: 0.5rem; background: #e8f4f8; border-left: 3px solid #0cce6b;">
+                <strong>Key differences:</strong>
+                <ul style="margin: 0.5rem 0 0; padding-left: 1.5rem;">
+                    <li>Git history appears <strong>only on individual factor pages</strong></li>
+                    <li>Provides <strong>most detailed revision history</strong></li>
+                    <li>Keeps homepage <strong>clean and focused</strong></li>
+                    <li>Shows <strong>specific changes</strong> with dates</li>
+                    <li>Best for users who want <strong>deep historical context</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="background: #f0f0f0; border: 1px solid #e5e5e5; border-radius: 8px; padding: 1.5rem;">
+            <h4 style="margin-top: 0;">Revision History</h4>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span>This factor was originally published in 2011</span>
+                <a href="#" style="color: #79589F;">View full history →</a>
+            </div>
+            <div style="background: white; border-radius: 6px; padding: 1rem; font-size: 0.875rem;">
+                <div style="margin-bottom: 0.75rem;">
+                    <strong>March 2024:</strong> Added clarification about secrets management
+                </div>
+                <div style="margin-bottom: 0.75rem;">
+                    <strong>January 2024:</strong> Updated examples for modern cloud platforms
+                </div>
+                <div>
+                    <strong>December 2023:</strong> Initial community revision
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

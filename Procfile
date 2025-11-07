@@ -1,0 +1,1 @@
+web: ./target/release/twelve_factor

@@ -1,0 +1,945 @@
+/* Community-focused design for evolving 12factor.net */
+
+// Enhanced color palette
+:root {
+  // Keep existing colors
+  --color-text: #1a1a1a;
+  --color-text-muted: #666666;
+  --color-bg: #ffffff;
+  --color-bg-secondary: #fafafa;
+  --color-purple: #79589F;
+  --color-purple-dark: #6762A6;
+  --color-purple-light: #F8F5FC;
+  --color-gray-light: #f7f7f7;
+  --color-border: #e5e5e5;
+  
+  // New community colors
+  --color-discord: #5865F2;
+  --color-github: #24292e;
+  --color-success: #0cce6b;
+  --color-info: #4285f4;
+  --color-card-hover: #fcfcfc;
+}
+
+// Hero section - Community focused
+.hero-community {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+  
+  h1 {
+    font-size: 3rem;
+    margin-bottom: var(--space-sm);
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .tagline {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: var(--space-xs);
+    font-weight: 500;
+  }
+  
+  .subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .evolution-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(253, 197, 0, 0.1) 0%, rgba(253, 197, 0, 0.05) 100%);
+    border: 1px solid #FDC500;
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    margin-bottom: var(--space-xl);
+    
+    .badge-text {
+      font-weight: 600;
+      color: darken(#FDC500, 15%);
+      font-size: 1.125rem;
+    }
+    
+    .badge-detail {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      border-left: 1px solid rgba(253, 197, 0, 0.3);
+      padding-left: 1rem;
+    }
+    
+    // Subtle animation to draw attention
+    animation: evolution-glow 3s ease-in-out infinite;
+  }
+  
+  @keyframes evolution-glow {
+    0%, 100% { 
+      box-shadow: 0 0 10px rgba(253, 197, 0, 0.2);
+    }
+    50% { 
+      box-shadow: 0 0 20px rgba(253, 197, 0, 0.4);
+    }
+  }
+}
+
+// Community action buttons
+.community-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xl);
+  
+  .btn {
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    
+    &.btn-primary {
+      background: var(--color-discord);
+      color: white;
+      
+      &:hover {
+        background: darken(#5865F2, 10%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+      }
+    }
+    
+    &.btn-secondary {
+      background: white;
+      color: var(--color-text);
+      border-color: var(--color-border);
+      
+      &:hover {
+        border-color: var(--color-purple);
+        color: var(--color-purple);
+        background: var(--color-purple-light);
+      }
+    }
+  }
+  
+  i {
+    font-size: 1.125rem;
+  }
+}
+
+// Project metadata
+.project-meta {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  
+  .meta-separator {
+    margin: 0 var(--space-sm);
+    opacity: 0.5;
+  }
+}
+
+// Latest update card
+.latest-update {
+  margin-bottom: var(--space-3xl);
+  
+  .update-card {
+    background: linear-gradient(135deg, var(--color-purple-light) 0%, var(--color-gray-light) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: var(--space-xl);
+    
+    h3 {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-purple);
+      margin-bottom: var(--space-sm);
+    }
+    
+    h4 {
+      margin-bottom: var(--space-sm);
+      
+      a {
+        color: var(--color-text);
+        text-decoration: none;
+        
+        &:hover {
+          color: var(--color-purple);
+        }
+      }
+    }
+    
+    p {
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-md);
+    }
+    
+    .read-more {
+      color: var(--color-purple);
+      font-weight: 500;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Factors section
+.factors-section {
+  margin-bottom: var(--space-3xl);
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+    
+    h2 {
+      font-size: 2.25rem;
+      color: var(--color-text);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .section-subtitle {
+      color: var(--color-text-muted);
+      font-size: 1.125rem;
+    }
+  }
+}
+
+// Factor cards grid
+.factors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.factor-card {
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--space-lg);
+  display: flex;
+  gap: var(--space-lg);
+  transition: all 0.2s ease;
+  position: relative;
+  
+  &:hover {
+    border-color: var(--color-purple);
+    background: var(--color-card-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(121, 88, 159, 0.1);
+    
+    .factor-number {
+      // Keep the background image, just add visual feedback
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+  
+  .factor-number {
+    // Hide the text
+    text-indent: -9999px;
+    overflow: hidden;
+    // Size for icon
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    // Icon will be set as background
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  
+  .factor-content {
+    flex: 1;
+    
+    h3 {
+      font-size: 1.125rem;
+      margin-bottom: var(--space-xs);
+      
+      a {
+        color: var(--color-text);
+        text-decoration: none;
+        
+        &:hover {
+          color: var(--color-purple);
+        }
+      }
+    }
+    
+    p {
+      color: var(--color-text-muted);
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+    
+    .discussion-link {
+      display: inline-block;
+      margin-top: var(--space-sm);
+      font-size: 0.875rem;
+      
+      a {
+        color: var(--color-info);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-xs);
+        
+        &:hover {
+          text-decoration: underline;
+        }
+        
+        &::before {
+          content: "💬";
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  
+  // Git info section with minimal yellow accents
+  .factor-git-info {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    
+    .git-update-time {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      
+      .time-value {
+        color: var(--color-text);
+        font-weight: 500;
+      }
+    }
+    
+    .git-contributors {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    
+    .contributor-avatars {
+      display: inline-flex;
+      margin-left: 4px;
+      
+      img {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--color-bg);
+        margin-left: -6px;
+        transition: all 0.2s ease;
+        
+        &:first-child {
+          margin-left: 0;
+        }
+        
+        &:hover {
+          transform: scale(1.1);
+          z-index: 1;
+        }
+      }
+    }
+  }
+  
+  // Status-based styling for git info
+  &[data-status="updated"] .factor-git-info {
+    border-top-color: var(--color-yellow);
+    
+    .time-value {
+      color: var(--color-success);
+    }
+  }
+  
+  &[data-status="active"] .factor-git-info {
+    border-top-color: var(--color-yellow);
+    border-top-width: 2px;
+  }
+  
+  // Hover effect for git info - expand on hover
+  &:hover .factor-git-info {
+    background: rgba(253, 197, 0, 0.03);
+    border-top-color: var(--color-yellow);
+    
+    .time-value {
+      text-decoration: underline;
+      text-decoration-color: var(--color-yellow);
+      text-underline-offset: 2px;
+    }
+    
+    // Show tooltip with full date on hover
+    .git-update-time {
+      position: relative;
+      
+      &:hover::after {
+        content: attr(data-full-date);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--color-text);
+        color: var(--color-bg);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        margin-bottom: 4px;
+        opacity: 0;
+        animation: fadeIn 0.2s ease forwards;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+// Mobile responsive styles for factor cards
+@media (max-width: 768px) {
+  .factor-card {
+    .factor-git-info {
+      font-size: 0.75rem;
+      
+      .git-contributors {
+        display: none; // Hide contributors on mobile for cleaner layout
+      }
+      
+      .time-value {
+        // Shorten time format on mobile
+        &:after {
+          content: " ago";
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// Proposed factors
+.proposed-factors {
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
+  padding: var(--space-xl);
+  
+  h3 {
+    color: var(--color-purple);
+    margin-bottom: var(--space-md);
+  }
+  
+  p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: var(--space-lg);
+    
+    li {
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--color-border);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      a {
+        color: var(--color-text);
+        text-decoration: none;
+        font-weight: 500;
+        
+        &:hover {
+          color: var(--color-purple);
+        }
+      }
+    }
+  }
+  
+  .contribute-link {
+    color: var(--color-purple);
+    font-weight: 500;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Adoption section
+.adoption-section {
+  margin-bottom: var(--space-3xl);
+  text-align: center;
+  
+  h2 {
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+  
+  .adoption-examples {
+    max-width: 600px;
+    margin: 0 auto;
+    
+    blockquote {
+      background: var(--color-gray-light);
+      border-left: 4px solid var(--color-purple);
+      padding: var(--space-lg);
+      margin: var(--space-xl) 0;
+      border-radius: 0 8px 8px 0;
+      
+      p {
+        font-style: italic;
+        color: var(--color-text);
+        margin-bottom: var(--space-sm);
+      }
+      
+      cite {
+        color: var(--color-text-muted);
+        font-style: normal;
+        font-weight: 500;
+      }
+    }
+    
+    .extend-note {
+      color: var(--color-text-muted);
+      
+      a {
+        color: var(--color-purple);
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// CTA section
+.cta-section {
+  text-align: center;
+  padding: var(--space-2xl) 0;
+  
+  h2 {
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+  
+  p {
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto var(--space-xl);
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+// Hide hamburger menu icon that doesn't work
+.navbar-toggler,
+.navbar-toggler-icon {
+  display: none !important;
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .hero-community h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-community .tagline {
+    font-size: 1.25rem;
+  }
+  
+  .factors-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .community-actions {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  // Hide nav on mobile for now
+  .navbar-nav {
+    display: none !important;
+  }
+}
+
+// Footer override - ensure correct colors
+.site-footer {
+  background: var(--color-bg-secondary) !important;
+  border-top: 1px solid var(--color-border) !important;
+  margin-top: var(--space-3xl) !important;
+  padding: var(--space-2xl) 0 !important;
+  
+  // Remove all the complex wrapper styles
+  .footer__wrapper,
+  .site-footer-top,
+  .site-footer-bottom,
+  .footer-links,
+  .social-media {
+    all: unset !important;
+  }
+  
+  .footer-content {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-xl) !important;
+    text-align: center !important;
+    color: var(--color-text-muted) !important;
+    font-size: 0.875rem !important;
+    
+    p {
+      margin-bottom: var(--space-sm) !important;
+      color: var(--color-text-muted) !important;
+      
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+    
+    a {
+      color: var(--color-purple) !important;
+      text-decoration: none !important;
+      
+      &:hover {
+        text-decoration: underline !important;
+      }
+    }
+  }
+}
+
+// Activity indicators - real-time data
+.factor-activity {
+  margin-top: 0.75rem;
+  min-height: 1.25rem; // Prevent layout shift
+  
+  &.loading {
+    .activity-text::after {
+      content: "...";
+      animation: loading-dots 1.5s infinite;
+    }
+  }
+  
+  .discussion-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      color: #FDC500;
+      
+      .activity-text {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .activity-text {
+    color: #FDC500;
+    font-weight: 500;
+  }
+  
+  .activity-time {
+    color: var(--color-text-muted);
+    font-size: 0.8125rem;
+    
+    &::before {
+      content: "·";
+      margin: 0 0.375rem;
+      color: var(--color-border);
+    }
+  }
+}
+
+// Factor status visual system
+.factor-card {
+  position: relative;
+  
+  // Status indicator badge
+  &[data-status]::after {
+    content: attr(data-status-label);
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  // Original factors (unchanged since 2011)
+  &[data-status="original"] {
+    .factor-number {
+      opacity: 0.8;
+    }
+    
+    &::after {
+      background: var(--color-bg-secondary);
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+      content: "Original";
+    }
+  }
+  
+  // Updated factors (recently revised)
+  &[data-status="updated"] {
+    border-color: var(--color-success);
+    
+    &::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: -1px;
+      bottom: -1px;
+      background: linear-gradient(135deg, var(--color-success) 0%, transparent 50%);
+      opacity: 0.08;
+      border-radius: inherit;
+      z-index: -1;
+    }
+    
+    &::after {
+      background: var(--color-success);
+      color: white;
+      content: "Updated";
+    }
+    
+    .factor-number {
+      background-color: rgba(12, 206, 107, 0.1);
+    }
+  }
+}
+
+// Active factor cards (under discussion)
+.factor-card--active {
+  position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(135deg, #FDC500 0%, transparent 50%);
+    opacity: 0.1;
+    border-radius: inherit;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+  }
+  
+  &:hover::before {
+    opacity: 0.15;
+  }
+  
+  .factor-number {
+    animation: subtle-pulse 3s ease-in-out infinite;
+  }
+  
+  &[data-status]::after {
+    background: #FDC500;
+    color: #000;
+    content: "Active";
+  }
+}
+
+// Evolution progress indicator
+.evolution-progress {
+  margin: 3rem 0;
+  text-align: center;
+  
+  .progress-stat {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    color: var(--color-text);
+  }
+  
+  .progress-bar {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    height: 8px;
+    margin: 0 auto;
+    background: var(--color-bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    display: block;
+    height: 100%;
+    background: #FDC500;
+    transition: width 0.6s ease;
+  }
+}
+
+// Loading animation
+@keyframes loading-dots {
+  0%, 20% { content: "."; }
+  40% { content: ".."; }
+  60%, 100% { content: "..."; }
+}
+
+// Subtle pulse for active discussions
+@keyframes subtle-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.9; }
+}
+
+// Factor page CTA section
+.factor-cta {
+  margin: 4rem 0 2rem;
+  padding: 2rem;
+  background: var(--color-bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+  
+  p {
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+  }
+  
+  .cta-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      
+      i {
+        font-size: 1.125rem;
+      }
+    }
+    
+    .btn-primary {
+      background-color: #FDC500;
+      border-color: #FDC500;
+      color: #000;
+      font-weight: 600;
+      
+      &:hover {
+        background-color: darken(#FDC500, 10%);
+        border-color: darken(#FDC500, 10%);
+      }
+    }
+    
+    .btn-secondary {
+      background-color: transparent;
+      border-color: var(--color-border);
+      color: var(--color-text);
+      
+      &:hover {
+        background-color: var(--color-bg);
+        border-color: var(--color-text-muted);
+      }
+    }
+  }
+  
+  .cta-note {
+    width: 100%;
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+}
+
+// Factor navigation improvements
+.factor-nav {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+// Status legend
+.status-legend {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .legend-badge {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    
+    &--original {
+      background: var(--color-bg-secondary);
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+    }
+    
+    &--active {
+      background: #FDC500;
+      color: #000;
+    }
+    
+    &--updated {
+      background: var(--color-success);
+      color: white;
+    }
+  }
+  
+  .legend-text {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+}

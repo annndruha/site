@@ -1,0 +1,33 @@
+.rvmrc
+.bundle
+.tool-versions
+.DS_Store
+.idea
+
+# Rust build artifacts
+/rust_prototype/target/
+/screenshot_tool/target/
+/test_markdown_rust/target/
+target/
+
+# Test outputs
+*.png
+*_output.html
+test_markdown_rendering.rb
+
+# Logs and temporary files
+*.log
+proto-ruby-build.log
+
+# Ruby bundler vendor directory (if used)
+vendor/bundle/
+
+# Mockup backups
+public/assets/mockups/.backup/
+
+# Server PID files
+*.pid
+rust_prototype/server.pid
+
+# Claude Setup
+exosuit/

@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+  <section class="hero-community">
+    <h1>The Twelve-Factor App</h1>
+    <p class="tagline">Evolving for the next decade of cloud-native development</p>
+    <p class="subtitle">After 13 years, the methodology is being updated by the community for modern needs</p>
+    <div class="evolution-badge">
+      <span class="badge-text">🔄 Active Evolution</span>
+      <span class="badge-detail">First major update since 2011</span>
+    </div>
+    
+    <div class="community-actions">
+      <a href="{{ community_config.discord_url }}" class="btn btn-primary">
+        <i class="bi bi-discord"></i> Join Discord
+      </a>
+      <a href="/community" class="btn btn-secondary">
+        <i class="bi bi-calendar-event"></i> Weekly Meetings
+      </a>
+      <a href="{{ community_config.github_repo }}" class="btn btn-secondary">
+        <i class="bi bi-github"></i> Contribute on GitHub
+      </a>
+    </div>
+    
+    <div class="project-meta">
+      <span class="meta-item">Open sourced {{ community_config.open_sourced_year }}</span>
+      <span class="meta-separator">•</span>
+      <span class="meta-item">Originally published {{ community_config.original_year }}</span>
+      <span class="meta-separator">•</span>
+      <span class="meta-item">Maintained by the community</span>
+    </div>
+  </section>
+
+  {% if latest_post %}
+  <section class="latest-update">
+    <div class="update-card">
+      <h3>Latest from the Community</h3>
+      <h4><a href="/blog/{{ latest_post.slug }}">{{ latest_post.title }}</a></h4>
+      <p>{{ latest_post.excerpt | default(value="Read about the latest developments in the twelve-factor methodology...") | safe }}</p>
+      <a href="/blog" class="read-more">Read all updates →</a>
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="factors-section">
+    <div class="section-header">
+      <h2>The Twelve Factors</h2>
+      <p class="section-subtitle">Time-tested principles, continuously refined by the community</p>
+      <div class="status-legend">
+        <span class="legend-item">
+          <span class="legend-badge legend-badge--original">Original</span>
+          <span class="legend-text">Unchanged since 2011</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-badge legend-badge--active">Active</span>
+          <span class="legend-text">Under discussion</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-badge legend-badge--updated">Updated</span>
+          <span class="legend-text">Recently revised</span>
+        </span>
+      </div>
+    </div>
+    
+    <div class="factors-grid">
+      {% for card in factor_cards %}
+      <article class="factor-card" data-status="original" data-factor="{{ card.slug }}">
+        <div class="factor-number">{{ card.number }}</div>
+        <div class="factor-content">
+          <h3><a href="/{{ card.slug }}">{{ card.title }}</a></h3>
+          <p>{{ card.subtitle }}</p>
+          <div class="factor-activity" style="display: none;">
+            <a href="#" class="discussion-link">
+              <span class="activity-text">Loading...</span>
+            </a>
+          </div>
+          <div class="factor-git-info">
+            <span class="git-update-time">Last updated <span class="time-value">...</span></span>
+            <span class="git-contributors" style="display: none;">
+              by
+              <span class="contributor-avatars">
+                <!-- Populated by JavaScript -->
+              </span>
+            </span>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="proposed-factors">
+      <h3>Proposed New Factors</h3>
+      <p>The community is discussing potential additions to address modern cloud-native needs:</p>
+      <ul>
+        {% for factor in community_config.proposed_factors %}
+        <li>
+          {% if factor.discussion_url %}
+          <a href="{{ factor.discussion_url }}">{{ factor.name }}</a>
+          {% else %}
+          {{ factor.name }}
+          {% endif %}
+          - {{ factor.description }}
+        </li>
+        {% endfor %}
+      </ul>
+      <a href="{{ community_config.github_repo }}/issues" class="contribute-link">Join the discussion →</a>
+    </div>
+  </section>
+
+  <section class="adoption-section">
+    <h2>Proven in Production</h2>
+    <p>Organizations worldwide use and extend the twelve-factor methodology:</p>
+    <div class="adoption-examples">
+      <blockquote>
+        <p>"By fostering a universal understanding across teams, we've eliminated friction between services, platforms, and dependencies."</p>
+        <cite>— Intuit Engineering</cite>
+      </blockquote>
+      <p class="extend-note">Many organizations create their own factors to address specific needs. <a href="/blog/intuit-thrilled">Learn how →</a></p>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Have ideas? Join the evolution</h2>
+    <p>The twelve-factor methodology grows through community collaboration. Whether you're implementing these principles or have insights to share, we welcome your participation.</p>
+    <div class="cta-buttons">
+      <a href="/community" class="btn btn-primary">Get Involved</a>
+      <a href="/blog" class="btn btn-secondary">Read the Blog</a>
+    </div>
+  </section>
+  
+  <div class="evolution-progress"></div>
+</div>
+
+<script src="/assets/js/community-activity.js" defer></script>
+{% endblock content %}

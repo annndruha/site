@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="abstract" id="post">
+  <article>
+    {{ community_content | safe }}
+  </article>
+</section>
+
+<section class="concrete">
+  <article class="maintainers">
+    {{ maintainers_content | safe }}
+  </article>
+</section>
+{% endblock %}

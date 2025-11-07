@@ -1,0 +1,286 @@
+// Factor Pages - Selective Yellow Implementation
+// Yellow only on interactive elements and CTAs
+
+// Import shared variables
+@import '../utilities/vars';
+
+// Breadcrumb styling (applies to both templates)
+.breadcrumb {
+  a {
+    color: #6c757d;  // Gray breadcrumb links
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: $color-yellow;  // Yellow on hover only
+      text-decoration: none;
+    }
+  }
+}
+
+// Factor pages with default template
+.factor-content {
+  // Main content links
+  a {
+    color: $color-purple;  // Purple for content links
+    
+    &:hover {
+      color: $color-dark-purple;  // Darker purple on hover
+      text-decoration: underline;
+    }
+  }
+}
+
+// CTA section styling
+.factor-cta {
+  background: #FFFBEB;  // Very subtle yellow background
+  border-left: 3px solid $color-yellow;
+  padding: 2rem;
+  border-radius: 6px;
+  margin: 3rem 0 2rem 0;
+  
+  h2 {
+    color: #212529;
+    font-size: 1.25rem;
+    margin: 0 0 1rem 0;
+  }
+  
+  p {
+    color: #495057;
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .cta-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  
+  .btn {
+    padding: 0.625rem 1.25rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    border: 2px solid;
+    font-size: 0.875rem;
+    
+    &.btn-primary {
+      background: $color-yellow;
+      color: #212529;
+      border-color: $color-yellow;
+      
+      &:hover {
+        background: #FFD633;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(253, 197, 0, 0.3);
+      }
+    }
+    
+    &.btn-secondary {
+      background: transparent;
+      color: #6c757d;
+      border-color: #dee2e6;
+      
+      &:hover {
+        border-color: $color-yellow;
+        color: #212529;
+        background: rgba($color-yellow, 0.05);
+      }
+    }
+    
+    // External link indicator
+    &[target="_blank"]:after {
+      content: " ↗";
+      font-size: 0.75em;
+      opacity: 0.7;
+    }
+  }
+  
+  .cta-note {
+    flex-basis: 100%;
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin: 0.5rem 0 0 0;
+  }
+}
+
+// Factor page layout adjustments (for refined template)
+.factor-layout {
+  .factor-sidebar {
+    a {
+      color: #6c757d;  // Gray links by default
+      
+      &:hover {
+        color: $color-yellow;  // Yellow on hover
+        background: rgba($color-yellow, 0.08);  // Very subtle yellow background
+        text-decoration: none;
+      }
+      
+      &.active {
+        background: #f8f9fa;  // Light gray for active (not purple)
+        color: #212529;  // Dark text
+        font-weight: 600;
+        border-left: 3px solid $color-yellow;  // Yellow accent border
+        padding-left: calc(1rem - 3px);  // Adjust padding for border
+      }
+    }
+  }
+  
+  .factor-content {
+    .breadcrumb {
+      a {
+        color: #6c757d;  // Gray breadcrumb links
+        transition: color 0.2s ease;
+        
+        &:hover {
+          color: $color-yellow;  // Yellow on hover only
+          text-decoration: none;
+        }
+      }
+    }
+    
+    h1 {
+      color: #212529;  // Black title (not purple)
+    }
+    
+    // CTA section at bottom of factor pages
+    .factor-cta,
+    .help-evolve {
+      background: #FFFBEB;  // Very subtle yellow background
+      border-left: 3px solid $color-yellow;
+      padding: 1.5rem;
+      border-radius: 6px;
+      margin-top: 3rem;
+      
+      strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        color: #212529;
+      }
+      
+      p {
+        margin: 0 0 1rem 0;
+        color: #495057;
+      }
+      
+      .btn,
+      a.button {
+        background: $color-yellow;
+        color: #212529;
+        padding: 0.625rem 1.25rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.2s ease;
+        border: 2px solid $color-yellow;
+        font-size: 0.875rem;
+        
+        &:hover {
+          background: #FFD633;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(253, 197, 0, 0.3);
+        }
+        
+        // External link icon
+        &[href*="github.com"]:after {
+          content: " ↗";
+          font-size: 0.75em;
+          opacity: 0.7;
+        }
+      }
+    }
+    
+    // Regular content links
+    article a {
+      color: $color-purple;  // Purple for content links
+      
+      &:hover {
+        color: $color-dark-purple;  // Darker purple on hover
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Factor navigation (prev/next)
+.factor-nav {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9ecef;
+  
+  .nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  a {
+    color: #6c757d;
+    text-decoration: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border: 1px solid #dee2e6;
+    
+    &:hover {
+      border-color: $color-yellow;
+      color: #212529;
+      background: rgba($color-yellow, 0.05);
+    }
+    
+    &.nav-prev:before {
+      content: "← ";
+    }
+    
+    &.nav-next:after {
+      content: " →";
+    }
+  }
+}
+
+// Ensure time indicators stay consistent
+.time-indicator {
+  color: #6c757d;
+  font-size: 0.75rem;
+  
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: $color-yellow;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.25rem;
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .factor-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .factor-sidebar {
+    position: static;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .factor-nav .nav-wrapper {
+    flex-direction: column;
+    gap: 1rem;
+    
+    a {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

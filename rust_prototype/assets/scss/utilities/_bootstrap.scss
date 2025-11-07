@@ -1,0 +1,67 @@
+/*!
+ * Bootstrap v5.2.3 (https://getbootstrap.com/)
+ * Copyright 2011-2022 The Bootstrap Authors
+ * Copyright 2011-2022 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ */
+
+// scss-docs-start import-stack
+// Configuration
+
+// Disable Dark Mode
+$enable-dark-mode: false;
+
+@import "vendor/scss/mixins/banner";
+@include bsBanner("");
+
+@import "vendor/scss/functions";
+@import "vendor/scss/variables";
+@import "vendor/scss/maps";
+@import "vendor/scss/mixins";
+@import "vendor/scss/utilities";
+
+@import "bootstrap-vars";
+
+// Layout & components
+@import "vendor/scss/root";
+@import "vendor/scss/reboot";
+@import "vendor/scss/type";
+@import "vendor/scss/images";
+@import "vendor/scss/containers";
+@import "vendor/scss/grid";
+
+// Orbit Bootstrap Overrides
+@import "overrides";
+
+@import "vendor/scss/tables";
+@import "vendor/scss/forms";
+@import "vendor/scss/buttons";
+@import "vendor/scss/transitions";
+@import "vendor/scss/dropdown";
+@import "vendor/scss/button-group";
+@import "vendor/scss/nav";
+@import "vendor/scss/navbar";
+@import "vendor/scss/card";
+@import "vendor/scss/accordion";
+@import "vendor/scss/breadcrumb";
+@import "vendor/scss/pagination";
+@import "vendor/scss/badge";
+@import "vendor/scss/alert";
+@import "vendor/scss/progress";
+@import "vendor/scss/list-group";
+@import "vendor/scss/close";
+@import "vendor/scss/toasts";
+@import "vendor/scss/modal";
+@import "vendor/scss/tooltip";
+@import "vendor/scss/popover";
+@import "vendor/scss/carousel";
+@import "vendor/scss/spinners";
+@import "vendor/scss/offcanvas";
+@import "vendor/scss/placeholders";
+
+// Helpers
+@import "vendor/scss/helpers";
+
+// Utilities
+@import "vendor/scss/utilities/api";
+// scss-docs-end import-stack

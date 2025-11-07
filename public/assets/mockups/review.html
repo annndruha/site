@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Review - 12factor (Fixed Implementation)</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #212529;
+            font-size: 16px;
+            line-height: 1.5;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: #fff;
+            border-bottom: 3px solid #FDC500;
+            padding: 16px 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #212529;
+        }
+        .header .preview-url {
+            font-size: 14px;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header .preview-url a {
+            color: #FDC500;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .header .preview-url a:hover {
+            color: #FFD633;
+            text-decoration: underline;
+        }
+        
+        /* Layout */
+        .container {
+            display: flex;
+            height: calc(100vh - 71px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: #fff;
+            border-right: 1px solid #dee2e6;
+            overflow-y: auto;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.02);
+        }
+        .sidebar-section {
+            padding: 24px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .sidebar-section:last-child {
+            border-bottom: none;
+        }
+        .sidebar-section h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6c757d;
+        }
+        .status-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .status-list li {
+            padding: 10px 12px;
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            border-radius: 6px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .status-list li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .status-list li:hover {
+            background: #f8f9fa;
+        }
+        .status-pending li:before {
+            content: "○";
+            color: #6c757d;
+        }
+        .status-pending li.current {
+            background: #FDC500;
+            color: #212529;
+            font-weight: 600;
+        }
+        .status-pending li.current:before {
+            content: "→";
+            color: #212529;
+        }
+        
+        /* Main content */
+        .main {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        .question-box {
+            background: #fff;
+            border: 2px solid #FDC500;
+            border-radius: 8px;
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .question-box h2 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #212529;
+        }
+        .question-box p {
+            margin: 0;
+            font-size: 16px;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        /* Decision controls */
+        .decision-controls {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .export-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        }
+        .copy-hint {
+            color: #28a745;
+            font-size: 16px;
+            margin-top: 16px;
+            display: none;
+            font-weight: 600;
+        }
+        
+        /* Options grid - using table for guaranteed alignment */
+        .options-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 32px 0;
+        }
+        
+        .options-table td {
+            width: 33.33%;
+            padding: 0 10px;
+            vertical-align: top;
+        }
+        
+        .option-card {
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .option-card:hover {
+            border-color: #adb5bd;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+        
+        .option-card.selected {
+            border-color: #FDC500;
+            box-shadow: 0 8px 16px rgba(253, 197, 0, 0.2);
+        }
+        
+        .option-header {
+            background: #f8f9fa;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e9ecef;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .option-card.selected .option-header {
+            background: #FFFBEB;
+            border-bottom-color: #FDC500;
+        }
+        
+        /* Content rows for alignment */
+        .content-row {
+            display: contents;
+        }
+        
+        .content-section {
+            padding: 24px 20px 28px 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        .content-section:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e0e0e0 20%, #e0e0e0 80%, transparent);
+        }
+        
+        .content-section:last-child {
+            background: #fafafa;
+        }
+        
+        .section-label {
+            font-size: 11px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            background: #f8f8f8;
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        /* Factor mockup */
+        .factor-mockup {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 24px;
+            font-size: 14px;
+            position: relative;
+            flex: 1;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .factor-mockup .breadcrumb {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 24px;
+        }
+        
+        .factor-mockup .breadcrumb a {
+            text-decoration: none;
+        }
+        
+        .factor-mockup h1 {
+            font-size: 28px;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .factor-mockup .subtitle {
+            color: #6c757d;
+            font-size: 16px;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        
+        .factor-mockup .content {
+            line-height: 1.6;
+            margin-bottom: 16px;
+            color: #495057;
+            flex: 1;
+        }
+        
+        .factor-mockup .cta {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 6px;
+            border-left: 3px solid #dee2e6;
+            margin-top: auto;
+        }
+        
+        .factor-mockup .cta strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #212529;
+        }
+        
+        /* Time indicator */
+        .time-indicator {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: #6c757d;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 3px 8px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .time-indicator::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #FDC500;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        /* Selection indicator */
+        .selection-indicator {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #dee2e6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .option-card.selected .selection-indicator {
+            border-color: #FDC500;
+            background: #FDC500;
+        }
+        
+        .option-card.selected .selection-indicator::after {
+            content: '✓';
+            color: #212529;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* Analysis styles */
+        .analysis-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .analysis-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.6;
+        }
+        
+        .analysis-icon {
+            flex-shrink: 0;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 1px;
+        }
+        
+        .analysis-icon.pro {
+            color: #28a745;
+        }
+        
+        .analysis-icon.con {
+            color: #dc3545;
+        }
+        
+        .analysis-text {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* System checks */
+        .checks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            flex: 1;
+        }
+        
+        .check-item {
+            text-align: center;
+            padding: 12px 8px;
+            border-radius: 6px;
+            border: 1px solid;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .check-good {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .check-warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        
+        .check-label {
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: block;
+        }
+        
+        .check-detail {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        /* Community page mockup styles */
+        .community-mockup {
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 14px;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hero-section {
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .hero-purple {
+            background: linear-gradient(135deg, #79589F 0%, #523A6E 100%);
+            color: white;
+        }
+        
+        .hero-white {
+            background: #fff;
+            border-bottom: 3px solid #FDC500;
+        }
+        
+        .hero-title {
+            font-size: 24px;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+        
+        .hero-subtitle {
+            font-size: 14px;
+            margin: 0 0 20px 0;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            border: 2px solid;
+            transition: all 0.2s ease;
+        }
+        
+        /* Button styles */
+        .btn-yellow {
+            background: #FDC500;
+            color: #212529;
+            border-color: #FDC500;
+        }
+        
+        .btn-white-outline {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+        
+        .btn-purple-outline {
+            background: transparent;
+            color: #79589F;
+            border-color: #79589F;
+        }
+        
+        .btn-white-solid {
+            background: white;
+            color: #79589F;
+            border-color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border-color: #6c757d;
+        }
+        
+        /* Stats section */
+        .stats-section {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .stat-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .stat-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: #FDC500;
+            transform: translateY(-2px);
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+        
+        /* Recommendation */
+        .recommendation {
+            background: #fff;
+            border: 2px solid #28a745;
+            padding: 32px;
+            margin-top: 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .recommendation h4 {
+            margin: 0 0 16px 0;
+            color: #28a745;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .recommendation p {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .recommendation ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .recommendation li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .export-note {
+            margin-top: 24px;
+            padding: 16px;
+            background: #d4edda;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #155724;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .options-table {
+                display: block;
+            }
+            
+            .options-table tr {
+                display: block;
+            }
+            
+            .options-table td {
+                display: block;
+                width: 100%;
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>12factor Design Review</h1>
+        <div class="preview-url">
+            <span>Preview:</span>
+            <a href="http://localhost:12012" target="_blank">http://localhost:12012</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3>✅ Completed</h3>
+                <ul class="status-list">
+                    <li>Yellow header/footer borders</li>
+                    <li>Factor cards with numeral icons</li>
+                    <li>Purple hover state on titles</li>
+                    <li>Yellow border on card hover</li>
+                    <li>External link indicators</li>
+                    <li>Activity indicators (fading)</li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>🎯 Current Decision</h3>
+                <ul class="status-list status-pending">
+                    <li class="current">Community page redesign</li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>📋 Upcoming</h3>
+                <ul class="status-list status-pending">
+                    <li>Blog page styling</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="main">
+            <div class="question-box">
+                <h2>Community Page Redesign</h2>
+                <p>The current community page has critical accessibility and design issues:</p>
+                <ul style="margin: 16px 0 0 0; padding-left: 24px; color: #dc3545; font-weight: 600;">
+                    <li>Yellow buttons on purple background (2.3:1 contrast - FAILS)</li>
+                    <li>White outline buttons on purple gradient (~3:1 - borderline)</li>
+                    <li>Glassmorphism effects creating unpredictable contrast</li>
+                    <li>Broken legacy sections at the bottom</li>
+                    <li>Inconsistent with our minimal design approach</li>
+                </ul>
+            </div>
+            
+            <div class="decision-controls">
+                <button class="export-btn" id="exportBtn">
+                    <span>📋</span>
+                    Export Selected Option
+                </button>
+                <div class="copy-hint" id="copyHint">✓ Copied to clipboard! Paste this into Claude Code.</div>
+            </div>
+            
+            <table class="options-table">
+                <tr>
+                    <td>
+                        <div class="option-card option-a" data-option="A" onclick="selectOption('A')">
+                            <div class="option-header">
+                                <span>Option A: Keep Current</span>
+                                <div class="selection-indicator" role="radio" aria-checked="false"></div>
+                            </div>
+                    </td>
+                    <td>
+                        <div class="option-card option-b" data-option="B" onclick="selectOption('B')">
+                            <div class="option-header">
+                                <span>Option B: Fix Contrast Only</span>
+                                <div class="selection-indicator" role="radio" aria-checked="false"></div>
+                            </div>
+                    </td>
+                    <td>
+                        <div class="option-card option-c selected" data-option="C" onclick="selectOption('C')">
+                            <div class="option-header">
+                                <span>Option C: Minimal Redesign ⭐</span>
+                                <div class="selection-indicator" role="radio" aria-checked="true"></div>
+                            </div>
+                    </td>
+                </tr>
+                
+                <!-- Preview row -->
+                <tr>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">PREVIEW</div>
+                            <div class="community-mockup">
+                                <div class="hero-section hero-purple">
+                                    <h1 class="hero-title">Join the Twelve-Factor Community</h1>
+                                    <p class="hero-subtitle">Connect with developers worldwide...</p>
+                                    <div class="hero-buttons">
+                                        <span class="btn btn-yellow">Join Discord</span>
+                                        <span class="btn btn-white-outline">Contribute on GitHub</span>
+                                    </div>
+                                </div>
+                                <div class="stats-section" style="background: #79589F;">
+                                    <div class="stat-glass">
+                                        <div class="stat-number" style="color: #FDC500;">54</div>
+                                        <div class="stat-label" style="color: rgba(255,255,255,0.7);">Contributors</div>
+                                    </div>
+                                    <div class="stat-glass">
+                                        <div class="stat-number" style="color: #FDC500;">23</div>
+                                        <div class="stat-label" style="color: rgba(255,255,255,0.7);">Issues</div>
+                                    </div>
+                                    <div class="stat-glass">
+                                        <div class="stat-number" style="color: #FDC500;">1.5k</div>
+                                        <div class="stat-label" style="color: rgba(255,255,255,0.7);">Stars</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">PREVIEW</div>
+                            <div class="community-mockup">
+                                <div class="hero-section hero-purple">
+                                    <h1 class="hero-title">Join the Twelve-Factor Community</h1>
+                                    <p class="hero-subtitle">Connect with developers worldwide...</p>
+                                    <div class="hero-buttons">
+                                        <span class="btn btn-white-solid">Join Discord</span>
+                                        <span class="btn btn-secondary">Contribute on GitHub</span>
+                                    </div>
+                                </div>
+                                <div class="stats-section" style="background: #f8f9fa;">
+                                    <div class="stat-card">
+                                        <div class="stat-number" style="color: #79589F;">54</div>
+                                        <div class="stat-label" style="color: #6c757d;">Contributors</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-number" style="color: #79589F;">23</div>
+                                        <div class="stat-label" style="color: #6c757d;">Issues</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-number" style="color: #79589F;">1.5k</div>
+                                        <div class="stat-label" style="color: #6c757d;">Stars</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">PREVIEW</div>
+                            <div class="community-mockup">
+                                <div class="hero-section hero-white">
+                                    <h1 class="hero-title" style="color: #212529;">Join the Twelve-Factor Community</h1>
+                                    <p class="hero-subtitle" style="color: #6c757d;">Connect with developers worldwide...</p>
+                                    <div class="hero-buttons">
+                                        <span class="btn btn-yellow">Join Discord</span>
+                                        <span class="btn btn-purple-outline">Contribute on GitHub</span>
+                                    </div>
+                                </div>
+                                <div class="stats-section" style="background: #f8f9fa;">
+                                    <div class="stat-card">
+                                        <div class="stat-number" style="color: #212529;">54</div>
+                                        <div class="stat-label" style="color: #6c757d;">Contributors</div>
+                                    </div>
+                                    <div class="stat-card" style="border-color: #FDC500;">
+                                        <div class="stat-number" style="color: #212529;">23</div>
+                                        <div class="stat-label" style="color: #6c757d;">Issues</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-number" style="color: #212529;">1.5k</div>
+                                        <div class="stat-label" style="color: #6c757d;">Stars</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <!-- Analysis row -->
+                <tr>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">ANALYSIS</div>
+                            <div class="analysis-grid">
+                                <div class="analysis-item">
+                                    <span class="analysis-icon con">✗</span>
+                                    <span class="analysis-text"><strong style="color: #ff6b6b;">Yellow on purple:</strong> 2.3:1 contrast (FAILS)</span>
+                                </div>
+                                <div class="analysis-item">
+                                    <span class="analysis-icon con">✗</span>
+                                    <span class="analysis-text"><strong style="color: #ff6b6b;">White on gradient:</strong> ~3:1 (borderline)</span>
+                                </div>
+                                <div class="analysis-item">
+                                    <span class="analysis-icon con">✗</span>
+                                    <span class="analysis-text"><strong style="color: #ff6b6b;">Glassmorphism:</strong> Unpredictable contrast</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">ANALYSIS</div>
+                            <div class="analysis-grid">
+                                <div class="analysis-item">
+                                    <span class="analysis-icon pro">✓</span>
+                                    <span class="analysis-text"><strong style="color: #0cce6b;">Fixes:</strong> Contrast issues resolved</span>
+                                </div>
+                                <div class="analysis-item">
+                                    <span class="analysis-icon con">✗</span>
+                                    <span class="analysis-text"><strong style="color: #ff6b6b;">But:</strong> Still has purple gradient hero</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">ANALYSIS</div>
+                            <div class="analysis-grid">
+                                <div class="analysis-item">
+                                    <span class="analysis-icon pro">✓</span>
+                                    <span class="analysis-text"><strong style="color: #0cce6b;">All contrasts:</strong> Pass WCAG AA</span>
+                                </div>
+                                <div class="analysis-item">
+                                    <span class="analysis-icon pro">✓</span>
+                                    <span class="analysis-text"><strong style="color: #0cce6b;">Consistent:</strong> Matches site design</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <!-- System checks row -->
+                <tr>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">SYSTEM CHECKS</div>
+                            <div class="checks-grid">
+                                <div class="check-item check-warning">
+                                    <div class="check-label">⚠ Contrast</div>
+                                    <div class="check-detail">Multiple fails</div>
+                                </div>
+                                <div class="check-item check-warning">
+                                    <div class="check-label">⚠ Legacy</div>
+                                    <div class="check-detail">Broken sections</div>
+                                </div>
+                                <div class="check-item check-warning">
+                                    <div class="check-label">⚠ Design</div>
+                                    <div class="check-detail">Inconsistent</div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">SYSTEM CHECKS</div>
+                            <div class="checks-grid">
+                                <div class="check-item check-good">
+                                    <div class="check-label">✓ Contrast</div>
+                                    <div class="check-detail">Fixed buttons</div>
+                                </div>
+                                <div class="check-item check-warning">
+                                    <div class="check-label">⚠ Hero</div>
+                                    <div class="check-detail">Still purple</div>
+                                </div>
+                                <div class="check-item check-good">
+                                    <div class="check-label">✓ Glass</div>
+                                    <div class="check-detail">Removed</div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="content-section">
+                            <div class="section-label">SYSTEM CHECKS</div>
+                            <div class="checks-grid">
+                                <div class="check-item check-good">
+                                    <div class="check-label">✓ Accessibility</div>
+                                    <div class="check-detail">All pass AA</div>
+                                </div>
+                                <div class="check-item check-good">
+                                    <div class="check-label">✓ Consistency</div>
+                                    <div class="check-detail">Site patterns</div>
+                                </div>
+                                <div class="check-item check-good">
+                                    <div class="check-label">✓ Clean</div>
+                                    <div class="check-detail">No legacy</div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            
+            <div class="recommendation">
+                <h4>Recommendation: Option C (Minimal Redesign)</h4>
+                <p>The minimal approach solves all issues while maintaining consistency:</p>
+                <ul>
+                    <li>White background with yellow accent border matches factor pages</li>
+                    <li>Yellow CTA button with black text (9.5:1 contrast ratio)</li>
+                    <li>Purple outline secondary button (4.82:1 contrast ratio)</li>
+                    <li>Simple card hover states instead of glassmorphism</li>
+                    <li>Removes broken legacy sections entirely</li>
+                </ul>
+                <p>This creates a welcoming community page that's accessible, maintainable, and consistent with the overall site design.</p>
+                <div class="export-note">
+                    📋 Remember to export your chosen option above!
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedOption = 'C';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('exportBtn').addEventListener('click', exportDecision);
+        });
+        
+        function selectOption(option) {
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+                const indicator = card.querySelector('.selection-indicator');
+                indicator.setAttribute('aria-checked', 'false');
+            });
+            
+            const selectedCard = document.querySelector(`[data-option="${option}"]`);
+            selectedCard.classList.add('selected');
+            selectedCard.querySelector('.selection-indicator').setAttribute('aria-checked', 'true');
+            
+            selectedOption = option;
+        }
+        
+        function exportDecision() {
+            const decisions = {
+                'A': {
+                    name: 'Keep Current',
+                    description: 'Keep the existing purple gradient hero with glassmorphism',
+                    implementation: 'No changes needed, but accessibility issues remain',
+                    rationale: 'Maintains current visual identity but has contrast failures and broken sections'
+                },
+                'B': {
+                    name: 'Fix Contrast Only',
+                    description: 'Fix color contrast issues while keeping purple gradient design',
+                    implementation: 'Change buttons to white/gray, remove glassmorphism, keep purple hero',
+                    rationale: 'Addresses accessibility but inconsistent with minimal design'
+                },
+                'C': {
+                    name: 'Minimal Redesign',
+                    description: 'Full redesign following established minimal patterns',
+                    implementation: 'White hero with yellow border, accessible button colors, clean cards, remove broken sections',
+                    rationale: 'Solves all issues: accessibility, consistency, and broken sections'
+                }
+            };
+            
+            const decision = decisions[selectedOption];
+            const timestamp = new Date().toISOString();
+            
+            const prompt = `DECISION MADE: Community Page Redesign
+
+**Selected**: Option ${selectedOption} - ${decision.name}
+
+**Description**: ${decision.description}
+
+**Implementation**: ${decision.implementation}
+
+**Rationale**: ${decision.rationale}
+
+**Decision made at**: ${timestamp}
+
+Please update the community page template and styling to implement this approach.`;
+            
+            const textArea = document.createElement('textarea');
+            textArea.value = prompt;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    document.getElementById('copyHint').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('copyHint').style.display = 'none';
+                    }, 3000);
+                }
+            } catch (err) {
+                document.body.removeChild(textArea);
+                alert('Please manually copy the decision text.');
+                console.log(prompt);
+            }
+        }
+    </script>
+</body>
+</html>

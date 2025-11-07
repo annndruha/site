@@ -1,0 +1,255 @@
+/* Documentation-First CSS for 12factor.net */
+/* This file overrides marketing-focused styles with clean documentation styles */
+
+@import "utilities/vars";
+@import "utilities/bootstrap-vars";
+
+/* Override existing variables for documentation-first approach */
+:root {
+  --color-text: #24292e;
+  --color-link: #0366d6;
+  --color-link-hover: #0056b3;
+  --color-border: #e1e4e8;
+  --color-bg-secondary: #f6f8fa;
+  --color-code-bg: #f3f4f6;
+  
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4rem;
+}
+
+/* Reset problematic styles */
+.pageblock--hero,
+.pageblock--oms-cta,
+.mega-menu,
+.hero__content img,
+.column__image-wrap--icon,
+.blurb__image-container {
+  display: none !important;
+}
+
+/* Base styles */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-text);
+  background: white;
+}
+
+/* Simplified header */
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  background: white;
+  
+  .navbar {
+    padding: var(--space-3) 0;
+  }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text) !important;
+    
+    /* Hide logo images, use text instead */
+    img {
+      display: none;
+    }
+  }
+  
+  .logo-text {
+    display: inline;
+  }
+}
+
+/* Simplified navigation */
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-4);
+  
+  .nav-link {
+    color: var(--color-text);
+    padding: var(--space-2) 0;
+    
+    &:hover {
+      color: var(--color-link);
+      text-decoration: none;
+    }
+  }
+}
+
+/* Content container */
+.content {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4);
+}
+
+/* Typography */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-4);
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.875rem;
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-3);
+}
+
+.lead {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-5);
+  color: #586069;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #586069;
+  margin-bottom: var(--space-5);
+}
+
+/* Factor list - clean and simple */
+.factor-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-5) 0;
+  
+  li {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+    
+    &:first-child {
+      border-top: 1px solid var(--color-border);
+    }
+  }
+  
+  a {
+    font-weight: 600;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  strong {
+    display: inline-block;
+    min-width: 3rem;
+  }
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  margin-bottom: var(--space-4);
+  color: #586069;
+  font-size: 0.875rem;
+  
+  a {
+    color: #586069;
+  }
+}
+
+/* Factor navigation */
+.factor-nav {
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+  
+  .nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .nav-prev,
+  .nav-next {
+    color: var(--color-link);
+  }
+}
+
+/* Code blocks */
+pre {
+  background: var(--color-code-bg);
+  padding: var(--space-3);
+  border-radius: 3px;
+  overflow-x: auto;
+  margin: var(--space-3) 0;
+}
+
+code {
+  background: var(--color-code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+/* Override footer to be minimal */
+.site-footer {
+  margin-top: var(--space-7);
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  
+  /* Hide marketing elements */
+  .cta,
+  .social-media {
+    display: none;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .content {
+    padding: var(--space-4) var(--space-3);
+  }
+  
+  .navbar-nav {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-text);
+  color: white;
+  padding: var(--space-2) var(--space-3);
+  text-decoration: none;
+  z-index: 100;
+  
+  &:focus {
+    top: 0;
+  }
+}

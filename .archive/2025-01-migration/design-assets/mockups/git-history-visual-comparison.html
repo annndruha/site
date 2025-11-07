@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git History Visual Comparison</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        
+        .recommendation-banner {
+            background: linear-gradient(135deg, #FDC500 0%, #FFE066 100%);
+            color: #000;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .recommendation-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .tldr-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tldr-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .tldr-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .winner-badge {
+            background: #0cce6b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .quick-reasons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .reason-pill {
+            background: rgba(121, 88, 159, 0.1);
+            border: 1px solid rgba(121, 88, 159, 0.3);
+            border-radius: 20px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .reason-icon {
+            font-size: 1.2rem;
+        }
+        
+        .details-toggle {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px dashed rgba(121, 88, 159, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            color: #79589F;
+            transition: all 0.2s ease;
+        }
+        
+        .details-toggle:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #79589F;
+        }
+        
+        .details-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .details-content.show {
+            display: block;
+        }
+        
+        .detail-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            border-left: 4px solid #FDC500;
+        }
+        
+        .detail-section h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .detail-points {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .detail-points li {
+            padding: 5px 0 5px 25px;
+            position: relative;
+        }
+        
+        .detail-points li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #FDC500;
+            font-weight: bold;
+        }
+        
+        .evidence-tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-left: 8px;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .option-column {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .option-header {
+            background: #79589F;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .option-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        .option-header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .mockup-container {
+            padding: 20px;
+            min-height: 600px;
+            background: #fafafa;
+        }
+        
+        /* Miniature homepage representation */
+        .mini-homepage {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .mini-hero {
+            text-align: center;
+            padding: 20px;
+            background: #f8f5fc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .mini-factors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .mini-factor-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .mini-factor-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .mini-factor-number {
+            width: 24px;
+            height: 24px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        /* Option 1 specific */
+        .option1 .mini-factor-card {
+            position: relative;
+        }
+        
+        .git-info-inline {
+            font-size: 0.65rem;
+            color: #666;
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #0cce6b;
+            color: white;
+            font-size: 0.5rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+        
+        .contributor-avatars {
+            display: inline-flex;
+            margin-left: 5px;
+        }
+        
+        .contributor-avatars span {
+            width: 16px;
+            height: 16px;
+            background: #ddd;
+            border-radius: 50%;
+            margin-left: -6px;
+            border: 2px solid white;
+        }
+        
+        .contributor-avatars span:first-child {
+            margin-left: 0;
+        }
+        
+        /* Option 2 specific */
+        .recent-updates-section {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .recent-updates-section h3 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        .update-timeline {
+            border-left: 3px solid #e5e5e5;
+            padding-left: 10px;
+        }
+        
+        .update-item {
+            margin-bottom: 10px;
+            font-size: 0.75rem;
+        }
+        
+        .update-item strong {
+            display: block;
+            color: #333;
+        }
+        
+        .update-item span {
+            color: #666;
+            font-size: 0.7rem;
+        }
+        
+        /* Option 3 specific */
+        .mini-factor-page {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 20px;
+        }
+        
+        .factor-page-header {
+            margin-bottom: 20px;
+        }
+        
+        .factor-page-header h3 {
+            margin: 0 0 5px 0;
+        }
+        
+        .factor-content-placeholder {
+            background: #f5f5f5;
+            height: 100px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .revision-history-box {
+            background: #f0f0f0;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        
+        .revision-history-box h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.85rem;
+        }
+        
+        .revision-list {
+            background: white;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 0.75rem;
+        }
+        
+        .revision-item {
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .revision-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        /* Pros and Cons */
+        .pros-cons {
+            padding: 20px;
+            border-top: 1px solid #e5e5e5;
+        }
+        
+        .pros-cons h3 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+        
+        .pros, .cons {
+            margin-bottom: 15px;
+        }
+        
+        .pros h4, .cons h4 {
+            margin: 0 0 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .pros h4 {
+            color: #0cce6b;
+        }
+        
+        .cons h4 {
+            color: #ff6b6b;
+        }
+        
+        .pros ul, .cons ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .pros li, .cons li {
+            margin-bottom: 3px;
+        }
+        
+        /* Difference highlighting */
+        .difference-highlight {
+            background: #FFEB3B;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .option-column {
+            position: relative;
+        }
+        
+        .key-difference {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FF5722;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        .prediction-section {
+            background: linear-gradient(135deg, #E1BEE7 0%, #F3E5F5 100%);
+            padding: 30px 20px;
+            margin-top: 20px;
+        }
+        
+        .prediction-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .prediction-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .prediction-header h2 {
+            margin: 0;
+            color: #6A1B9A;
+        }
+        
+        .prediction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .prediction-card {
+            background: #F3E5F5;
+            border: 2px solid #E1BEE7;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.2s ease;
+        }
+        
+        .prediction-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(106, 27, 154, 0.2);
+            border-color: #BA68C8;
+        }
+        
+        .prediction-card h4 {
+            margin: 0 0 8px 0;
+            color: #6A1B9A;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .prediction-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 1200px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="recommendation-banner">
+        <div class="recommendation-content">
+            <div class="tldr-box">
+                <div class="tldr-header">
+                    <h2>TL;DR</h2>
+                    <span class="winner-badge">Option 1 Wins</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 1.1rem;">
+                    <strong>Put git info directly on the factor cards</strong> – it shows twelve-factor is alive and evolving.
+                </p>
+                <div class="quick-reasons">
+                    <div class="reason-pill">
+                        <span class="reason-icon">👀</span>
+                        <span>Instant visibility</span>
+                    </div>
+                    <div class="reason-pill">
+                        <span class="reason-icon">👥</span>
+                        <span>Shows contributors</span>
+                    </div>
+                    <div class="reason-pill">
+                        <span class="reason-icon">🟡</span>
+                        <span>Adds yellow flair</span>
+                    </div>
+                    <div class="reason-pill">
+                        <span class="reason-icon">✨</span>
+                        <span>"Living doc" vibe</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="details-toggle" onclick="toggleDetails()">
+                📋 See detailed reasoning (click to expand)
+            </div>
+            
+            <div class="details-content" id="detailsContent">
+                <div class="detail-section">
+                    <h4>🎯 Your Vision → Option 1</h4>
+                    <ul class="detail-points">
+                        <li>You said: "Living document that evolves" <span class="evidence-tag">direct quote</span></li>
+                        <li>Option 1 shows evolution on homepage instantly</li>
+                        <li>No clicking needed to see what's changing</li>
+                    </ul>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>👥 Community First</h4>
+                    <ul class="detail-points">
+                        <li>Contributor avatars = recognition</li>
+                        <li>Activity counts = social proof</li>
+                        <li>You built <code>community-activity.js</code> for this!</li>
+                    </ul>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>🟡 Yellow Design Elements</h4>
+                    <ul class="detail-points">
+                        <li>Vish wanted more yellow <span class="evidence-tag">feedback</span></li>
+                        <li>Yellow badges for active discussions</li>
+                        <li>Yellow hover states on activity</li>
+                    </ul>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>🚀 Ready to Ship</h4>
+                    <ul class="detail-points">
+                        <li>You already built the infrastructure</li>
+                        <li>GitHub API integration done</li>
+                        <li>Visual status system complete</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleDetails() {
+            const details = document.getElementById('detailsContent');
+            const toggle = document.querySelector('.details-toggle');
+            
+            if (details.classList.contains('show')) {
+                details.classList.remove('show');
+                toggle.innerHTML = '📋 See detailed reasoning (click to expand)';
+            } else {
+                details.classList.add('show');
+                toggle.innerHTML = '📋 Hide detailed reasoning (click to collapse)';
+            }
+        }
+    </script>
+    
+    <div class="comparison-grid">
+        <!-- Option 1: Inline Git Info -->
+        <div class="option-column option1">
+            <span class="key-difference">ON EVERY CARD</span>
+            <div class="option-header">
+                <h2>Option 1: Inline Git Info</h2>
+                <p>Git data directly on factor cards</p>
+            </div>
+            <div class="mockup-container">
+                <div class="mini-homepage">
+                    <div class="mini-hero">
+                        <strong>The Twelve-Factor App</strong>
+                        <div style="font-size: 0.8rem; color: #666;">Evolving for the next decade</div>
+                    </div>
+                    <div class="mini-factors-grid">
+                        <div class="mini-factor-card">
+                            <span class="status-badge">UPDATED</span>
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">III</div>
+                                <div>
+                                    <strong>Config</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Store config in the environment</div>
+                                </div>
+                            </div>
+                            <div class="git-info-inline" style="background: #FFFDE7; margin: -5px; padding: 5px; border-radius: 0 0 4px 4px;">
+                                <span style="color: #0cce6b;">Last updated 2 weeks ago</span>
+                                <div>
+                                    by 
+                                    <span class="contributor-avatars">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">I</div>
+                                <div>
+                                    <strong>Codebase</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">One codebase, many deploys</div>
+                                </div>
+                            </div>
+                            <div class="git-info-inline">
+                                <span style="color: #666;">Last updated 13 years ago</span>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">II</div>
+                                <div>
+                                    <strong>Dependencies</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Explicitly declare dependencies</div>
+                                </div>
+                            </div>
+                            <div class="git-info-inline">
+                                <span style="color: #666;">Last updated 13 years ago</span>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">IV</div>
+                                <div>
+                                    <strong>Backing Services</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Treat as attached resources</div>
+                                </div>
+                            </div>
+                            <div class="git-info-inline">
+                                <span style="color: #666;">Last updated 13 years ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <h3>Analysis</h3>
+                <div class="pros">
+                    <h4>✓ Pros</h4>
+                    <ul>
+                        <li>Immediate visibility of activity</li>
+                        <li>Social proof with contributor avatars</li>
+                        <li>Clear visual hierarchy with badges</li>
+                        <li>No additional clicks needed</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>✗ Cons</h4>
+                    <ul>
+                        <li>More visual clutter on homepage</li>
+                        <li>Cards become taller/busier</li>
+                        <li>May overwhelm new visitors</li>
+                        <li>Harder to scan factor titles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 2: Separate Section -->
+        <div class="option-column option2">
+            <span class="key-difference">SEPARATE FEED</span>
+            <div class="option-header">
+                <h2>Option 2: Separate Section</h2>
+                <p>Dedicated recent updates area</p>
+            </div>
+            <div class="mockup-container">
+                <div class="mini-homepage">
+                    <div class="mini-hero">
+                        <strong>The Twelve-Factor App</strong>
+                        <div style="font-size: 0.8rem; color: #666;">Evolving for the next decade</div>
+                    </div>
+                    <div class="mini-factors-grid">
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">I</div>
+                                <div>
+                                    <strong>Codebase</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">One codebase, many deploys</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">II</div>
+                                <div>
+                                    <strong>Dependencies</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Explicitly declare dependencies</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">III</div>
+                                <div>
+                                    <strong>Config</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Store config in the environment</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">IV</div>
+                                <div>
+                                    <strong>Backing Services</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Treat as attached resources</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-updates-section" style="border: 3px solid #FFEB3B;">
+                        <h3>Recent Updates <span class="difference-highlight">NEW SECTION</span></h3>
+                        <div class="update-timeline">
+                            <div class="update-item">
+                                <strong>Config factor updated</strong>
+                                <span>Added environment variable best practices • 2 weeks ago by @contributor</span>
+                            </div>
+                            <div class="update-item">
+                                <strong>Dependencies factor updated</strong>
+                                <span>Clarified container considerations • 1 month ago by @maintainer</span>
+                            </div>
+                            <div class="update-item">
+                                <strong>Port binding factor updated</strong>
+                                <span>Added WebSocket examples • 2 months ago by @contributor</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <h3>Analysis</h3>
+                <div class="pros">
+                    <h4>✓ Pros</h4>
+                    <ul>
+                        <li>Clean factor cards remain scannable</li>
+                        <li>Chronological activity feed</li>
+                        <li>Includes commit messages for context</li>
+                        <li>Familiar blog-like updates pattern</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>✗ Cons</h4>
+                    <ul>
+                        <li>Activity less prominent</li>
+                        <li>Requires scrolling to see updates</li>
+                        <li>No visual connection to factor cards</li>
+                        <li>May be overlooked by visitors</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 3: Factor Page Only -->
+        <div class="option-column option3">
+            <span class="key-difference">DETAIL PAGES ONLY</span>
+            <div class="option-header">
+                <h2>Option 3: Factor Page Only</h2>
+                <p>Git history on individual pages</p>
+            </div>
+            <div class="mockup-container">
+                <div class="mini-homepage">
+                    <div class="mini-hero">
+                        <strong>The Twelve-Factor App</strong>
+                        <div style="font-size: 0.8rem; color: #666;">Evolving for the next decade</div>
+                    </div>
+                    <div class="mini-factors-grid">
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">I</div>
+                                <div>
+                                    <strong>Codebase</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">One codebase, many deploys</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">II</div>
+                                <div>
+                                    <strong>Dependencies</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Explicitly declare dependencies</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">III</div>
+                                <div>
+                                    <strong>Config</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Store config in the environment</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-factor-card">
+                            <div class="mini-factor-header">
+                                <div class="mini-factor-number">IV</div>
+                                <div>
+                                    <strong>Backing Services</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Treat as attached resources</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mini-factor-page" style="margin-top: 20px;">
+                    <div class="factor-page-header">
+                        <h3>III. Config</h3>
+                        <p style="color: #666; font-size: 0.8rem;">Store config in the environment</p>
+                    </div>
+                    <div class="factor-content-placeholder"></div>
+                    <div class="revision-history-box" style="border: 3px solid #FFEB3B;">
+                        <h4>Revision History <span class="difference-highlight">ONLY HERE</span></h4>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 0.75rem;">Originally published in 2011</span>
+                            <a href="#" style="color: #79589F; font-size: 0.75rem;">View full history →</a>
+                        </div>
+                        <div class="revision-list">
+                            <div class="revision-item">
+                                <strong>March 2024:</strong> Added clarification about secrets management
+                            </div>
+                            <div class="revision-item">
+                                <strong>January 2024:</strong> Updated examples for modern cloud platforms
+                            </div>
+                            <div class="revision-item">
+                                <strong>December 2023:</strong> Initial community revision
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <h3>Analysis</h3>
+                <div class="pros">
+                    <h4>✓ Pros</h4>
+                    <ul>
+                        <li>Homepage stays clean and focused</li>
+                        <li>Detailed history for interested users</li>
+                        <li>Progressive disclosure pattern</li>
+                        <li>No performance impact on homepage</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>✗ Cons</h4>
+                    <ul>
+                        <li>No activity visibility on homepage</li>
+                        <li>Users may not discover updates</li>
+                        <li>Less encouragement to contribute</li>
+                        <li>Misses "living document" messaging</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="prediction-section">
+        <div class="prediction-content">
+            <div class="prediction-header">
+                <h2>🔮 Based on everything you've said, I predict you'll also want...</h2>
+            </div>
+            
+            <div class="prediction-grid">
+                <div class="prediction-card">
+                    <h4>🏆 Contributor Leaderboard</h4>
+                    <p>Recognize top contributors with a monthly/all-time leaderboard. Gamify contributions to match that "energetic community" vibe.</p>
+                </div>
+                
+                <div class="prediction-card">
+                    <h4>📢 "What's New" Banner</h4>
+                    <p>Show returning visitors what changed since their last visit. Cookie-based tracking with dismissible yellow banner.</p>
+                </div>
+                
+                <div class="prediction-card">
+                    <h4>🤖 Auto-Generated Changelog</h4>
+                    <p>Turn git commits into readable changelog entries. Auto-categorize as "Enhancement", "Clarification", "Example Update".</p>
+                </div>
+                
+                <div class="prediction-card">
+                    <h4>💬 Discord Integration</h4>
+                    <p>Show live Discord discussion count on factor cards. Link GitHub issues to Discord threads for real-time chat.</p>
+                </div>
+                
+                <div class="prediction-card">
+                    <h4>✅ Implementation Tracker</h4>
+                    <p>Visual progress bars showing: Proposed → In Discussion → In Review → Merged. Makes the evolution process transparent.</p>
+                </div>
+                
+                <div class="prediction-card">
+                    <h4>🎯 One-Click Contributing</h4>
+                    <p>"Suggest an edit" button on each factor page that pre-fills a GitHub issue template. Lower the barrier to entry.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #F3E5F5; border-radius: 8px; border-left: 4px solid #BA68C8;">
+                <h4 style="margin: 0 0 10px 0; color: #6A1B9A;">Why these predictions?</h4>
+                <p style="margin: 0; color: #666;">
+                    You care about: living documentation, community energy, visual polish (yellow!), reducing friction, 
+                    and making twelve-factor feel alive after 13 years. Every prediction supports these goals while 
+                    maintaining the ADHD-friendly, contribution-encouraging approach you've demonstrated throughout our work.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="prediction-section" style="background: linear-gradient(135deg, #FFE082 0%, #FFF9C4 100%);">
+        <div class="prediction-content">
+            <div class="prediction-header">
+                <h2>🎨 What you'll want for THIS mockup...</h2>
+            </div>
+            
+            <div class="prediction-grid">
+                <div class="prediction-card" style="background: #FFF9C4; border-color: #FFD54F;">
+                    <h4>📱 Mobile View Toggle</h4>
+                    <p>Button to switch between desktop/mobile views. You'll realize factor cards need different git info layout on small screens.</p>
+                </div>
+                
+                <div class="prediction-card" style="background: #FFF9C4; border-color: #FFD54F;">
+                    <h4>🔄 Live Preview Mode</h4>
+                    <p>Make the mockup interactive - click options to see them "in action" on a simulated homepage. Side-by-side becomes click-to-compare.</p>
+                </div>
+                
+                <div class="prediction-card" style="background: #FFF9C4; border-color: #FFD54F;">
+                    <h4>🎚️ Density Slider</h4>
+                    <p>Adjust how much git info shows. Slider from "Minimal" to "Everything" to find the sweet spot between clean and informative.</p>
+                </div>
+                
+                <div class="prediction-card" style="background: #FFF9C4; border-color: #FFD54F;">
+                    <h4>⏱️ Time Machine</h4>
+                    <p>Show how Option 1 looks with different update times: "All fresh" vs "Some stale" vs "Mixed activity". Test visual hierarchy.</p>
+                </div>
+                
+                <div class="prediction-card" style="background: #FFF9C4; border-color: #FFD54F;">
+                    <h4>🎨 Theme Variations</h4>
+                    <p>Quick toggle: "More Yellow" vs "Subtle Yellow" vs "No Yellow" to test Vish's feedback about yellow design elements.</p>
+                </div>
+                
+                <div class="prediction-card" style="background: #FFF9C4; border-color: #FFD54F;">
+                    <h4>💾 Export Decision</h4>
+                    <p>Copy button that formats your choice + reasoning as markdown. Perfect for pasting back to Claude: "I choose Option X because..."</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #FFF9C4; border-radius: 8px; border-left: 4px solid #FFC107;">
+                <h4 style="margin: 0 0 10px 0; color: #F57C00;">Why these mockup predictions?</h4>
+                <p style="margin: 0; color: #666;">
+                    Your patterns: You create mockups → immediately want them interactive. You care about mobile/responsive. 
+                    You iterate on visual density. You test edge cases. You want decisions documented. And you ALWAYS come back 
+                    to "does this have enough yellow?" 😄
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

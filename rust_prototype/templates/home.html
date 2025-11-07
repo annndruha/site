@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="content">
+    <h1>The Twelve-Factor App</h1>
+    <p class="lead">In the modern era, software is commonly delivered as a service: called web apps, or software-as-a-service. The twelve-factor app is a methodology for building software-as-a-service apps.</p>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="content">
+    <ol class="factor-list">
+      <li><a href="/codebase"><strong>I. Codebase</strong></a> – One codebase tracked in revision control, many deploys</li>
+      <li><a href="/dependencies"><strong>II. Dependencies</strong></a> – Explicitly declare and isolate dependencies</li>
+      <li><a href="/config"><strong>III. Config</strong></a> – Store config in the environment</li>
+      <li><a href="/backing-services"><strong>IV. Backing services</strong></a> – Treat backing services as attached resources</li>
+      <li><a href="/build-release-run"><strong>V. Build, release, run</strong></a> – Strictly separate build and run stages</li>
+      <li><a href="/processes"><strong>VI. Processes</strong></a> – Execute the app as one or more stateless processes</li>
+      <li><a href="/port-binding"><strong>VII. Port binding</strong></a> – Export services via port binding</li>
+      <li><a href="/concurrency"><strong>VIII. Concurrency</strong></a> – Scale out via the process model</li>
+      <li><a href="/disposability"><strong>IX. Disposability</strong></a> – Maximize robustness with fast startup and graceful shutdown</li>
+      <li><a href="/dev-prod-parity"><strong>X. Dev/prod parity</strong></a> – Keep development, staging, and production as similar as possible</li>
+      <li><a href="/logs"><strong>XI. Logs</strong></a> – Treat logs as event streams</li>
+      <li><a href="/admin-processes"><strong>XII. Admin processes</strong></a> – Run admin/management tasks as one-off processes</li>
+    </ol>
+  </div>
+</div>
+{% endblock content %}

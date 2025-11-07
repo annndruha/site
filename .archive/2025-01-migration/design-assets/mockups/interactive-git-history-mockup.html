@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Git History Mockup</title>
+    <style>
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+        
+        .control-panel {
+            background: linear-gradient(135deg, #FDC500 0%, #FFE066 100%);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .controls-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .control-section {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+        }
+        
+        .control-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-label {
+            font-weight: 600;
+            color: #6A1B9A;
+            margin-bottom: 10px;
+            display: block;
+            font-size: 0.95rem;
+        }
+        
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .control-group {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .option-selector {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .option-btn {
+            padding: 5px 15px;
+            border: 2px solid #79589F;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        
+        .option-btn.active {
+            background: #79589F;
+            color: white;
+        }
+        
+        .slider-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .slider {
+            width: 120px;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #79589F;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .export-btn {
+            background: #0cce6b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+        
+        .export-btn:hover {
+            background: #0bb25c;
+            transform: translateY(-1px);
+        }
+        
+        .preview-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .preview-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .preview-header {
+            background: #79589F;
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .preview-content {
+            padding: 20px;
+        }
+        
+        /* Homepage mockup styles */
+        .mock-homepage {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .mock-hero {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 30px;
+        }
+        
+        .mock-hero h1 {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+        
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .factor-card {
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .factor-card:hover {
+            border-color: #79589F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .factor-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .factor-icon {
+            width: 48px;
+            height: 48px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .factor-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .factor-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 5px 0 0 0;
+        }
+        
+        /* Git info variations */
+        .git-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .git-info.style-yellow {
+            background: #FFFDE7;
+            margin: -10px -20px -20px;
+            padding: 15px 20px;
+            border-radius: 0 0 6px 6px;
+            border-top: 1px solid #FFF176;
+        }
+        
+        .update-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #0cce6b;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .contributor-avatars {
+            display: inline-flex;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .contributor-avatars span {
+            width: 20px;
+            height: 20px;
+            background: #ddd;
+            border-radius: 50%;
+            margin-left: -8px;
+            border: 2px solid white;
+            display: inline-block;
+        }
+        
+        .contributor-avatars span:first-child {
+            margin-left: 0;
+        }
+        
+        /* Option 2 styles */
+        .recent-updates {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .recent-updates h3 {
+            margin: 0 0 15px 0;
+        }
+        
+        .update-timeline {
+            border-left: 3px solid #e5e5e5;
+            padding-left: 15px;
+        }
+        
+        .update-item {
+            margin-bottom: 15px;
+        }
+        
+        .update-item strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        .update-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        /* Mobile styles */
+        .mobile-view .factors-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .mobile-view .git-info {
+            font-size: 0.8rem;
+        }
+        
+        /* Export modal */
+        .export-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .export-content {
+            background: white;
+            max-width: 600px;
+            margin: 50px auto;
+            border-radius: 12px;
+            padding: 25px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .export-content h3 {
+            margin: 0 0 15px 0;
+        }
+        
+        .export-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            resize: vertical;
+        }
+        
+        .export-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: #79589F;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #e5e5e5;
+            color: #333;
+        }
+        
+        /* Hidden by default */
+        .option-2-content,
+        .option-3-content {
+            display: none;
+        }
+        
+        /* Recommendation section */
+        .recommendation-section {
+            background: linear-gradient(135deg, #F3E5F5 0%, #FFF 100%);
+            padding: 30px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .recommendation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .tldr-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 2px solid #E1BEE7;
+        }
+        
+        .tldr-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .tldr-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #6A1B9A;
+        }
+        
+        .winner-badge {
+            background: #0cce6b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .quick-reasons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .reason-pill {
+            background: rgba(121, 88, 159, 0.1);
+            border: 1px solid rgba(121, 88, 159, 0.3);
+            border-radius: 20px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .try-it-cta {
+            background: #FDC500;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .try-it-cta:hover {
+            background: #FFD740;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(253, 197, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="recommendation-section">
+        <div class="recommendation-container">
+            <div class="tldr-box">
+                <div class="tldr-header">
+                    <h2>Our Recommendation</h2>
+                    <span class="winner-badge">Option 1 Wins</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 1.1rem;">
+                    <strong>Put git info directly on the factor cards</strong> – it shows twelve-factor is alive and evolving.
+                </p>
+                <div class="quick-reasons">
+                    <div class="reason-pill">
+                        <span>👀</span>
+                        <span>Instant visibility</span>
+                    </div>
+                    <div class="reason-pill">
+                        <span>👥</span>
+                        <span>Shows contributors</span>
+                    </div>
+                    <div class="reason-pill">
+                        <span>🟡</span>
+                        <span>Adds yellow flair</span>
+                    </div>
+                    <div class="reason-pill">
+                        <span>✨</span>
+                        <span>"Living doc" vibe</span>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; font-size: 0.95rem; color: #666;">
+                    Try the interactive controls below to test different scenarios.
+                    <a href="#detailed-reasoning" style="color: #6A1B9A; font-weight: 600;">See detailed reasoning ↓</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="control-panel" id="controls">
+        <div class="controls-wrapper">
+            <div class="control-section">
+                <div class="section-label">Design Decision</div>
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label>Layout:</label>
+                        <div class="option-selector">
+                            <button class="option-btn active" data-option="1">1: Inline</button>
+                            <button class="option-btn" data-option="2">2: Separate</button>
+                            <button class="option-btn" data-option="3">3: Detail Only</button>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>Yellow Level:</label>
+                        <div class="slider-control">
+                            <span>Subtle</span>
+                            <input type="range" class="slider" id="yellowSlider" min="0" max="2" value="1">
+                            <span>Bold</span>
+                        </div>
+                    </div>
+                    
+                    <button class="export-btn" onclick="exportDecision()">
+                        📋 Export Decision
+                    </button>
+                </div>
+            </div>
+            
+            <div class="control-section">
+                <div class="section-label">Test Scenarios</div>
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label>Device:</label>
+                        <div class="option-selector">
+                            <button class="option-btn active" data-view="desktop">Desktop</button>
+                            <button class="option-btn" data-view="mobile">Mobile</button>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>Activity Level:</label>
+                        <div class="option-selector">
+                            <button class="option-btn active" data-fresh="mixed">Mixed</button>
+                            <button class="option-btn" data-fresh="all-fresh">All Fresh</button>
+                            <button class="option-btn" data-fresh="all-stale">All Stale</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="preview-container">
+        <div class="preview-wrapper">
+            <div class="preview-header">
+                Live Preview - <span id="currentOption">Option 1: Inline Git Info</span>
+            </div>
+            <div class="preview-content">
+                <div class="mock-homepage" id="mockHomepage">
+                    <div class="mock-hero">
+                        <h1>The Twelve-Factor App</h1>
+                        <p>Evolving for the next decade of cloud-native development</p>
+                    </div>
+                    
+                    <div class="factors-grid">
+                        <div class="factor-card" data-factor="config">
+                            <span class="update-badge" style="display: none;">UPDATED</span>
+                            <div class="factor-header">
+                                <div class="factor-icon">III</div>
+                                <div>
+                                    <h3 class="factor-title">Config</h3>
+                                    <p class="factor-subtitle">Store config in the environment</p>
+                                </div>
+                            </div>
+                            <div class="git-info option-1-content">
+                                <span class="update-time">Last updated 2 weeks ago</span>
+                                <span>by</span>
+                                <span class="contributor-avatars">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="factor-card" data-factor="codebase">
+                            <div class="factor-header">
+                                <div class="factor-icon">I</div>
+                                <div>
+                                    <h3 class="factor-title">Codebase</h3>
+                                    <p class="factor-subtitle">One codebase tracked in revision control</p>
+                                </div>
+                            </div>
+                            <div class="git-info option-1-content">
+                                <span class="update-time">Last updated 13 years ago</span>
+                            </div>
+                        </div>
+                        
+                        <div class="factor-card" data-factor="dependencies">
+                            <div class="factor-header">
+                                <div class="factor-icon">II</div>
+                                <div>
+                                    <h3 class="factor-title">Dependencies</h3>
+                                    <p class="factor-subtitle">Explicitly declare and isolate dependencies</p>
+                                </div>
+                            </div>
+                            <div class="git-info option-1-content">
+                                <span class="update-time">Last updated 13 years ago</span>
+                            </div>
+                        </div>
+                        
+                        <div class="factor-card" data-factor="backing-services">
+                            <div class="factor-header">
+                                <div class="factor-icon">IV</div>
+                                <div>
+                                    <h3 class="factor-title">Backing Services</h3>
+                                    <p class="factor-subtitle">Treat backing services as attached resources</p>
+                                </div>
+                            </div>
+                            <div class="git-info option-1-content">
+                                <span class="update-time">Last updated 1 month ago</span>
+                                <span>by</span>
+                                <span class="contributor-avatars">
+                                    <span></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-updates option-2-content">
+                        <h3>Recent Updates</h3>
+                        <div class="update-timeline">
+                            <div class="update-item">
+                                <strong>Config factor updated</strong>
+                                <span class="update-meta">Added environment variable best practices • 2 weeks ago by @contributor</span>
+                            </div>
+                            <div class="update-item">
+                                <strong>Backing Services factor updated</strong>
+                                <span class="update-meta">Clarified cloud service patterns • 1 month ago by @maintainer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="recommendation-section" id="detailed-reasoning" style="background: linear-gradient(135deg, #FFF9C4 0%, #FFF 100%); margin-top: 40px;">
+        <div class="recommendation-container">
+            <h2 style="color: #6A1B9A; margin-bottom: 20px;">Detailed Reasoning for Option 1</h2>
+            
+            <div style="display: grid; gap: 15px;">
+                <div class="tldr-box" style="border-color: #FDC500;">
+                    <h3 style="color: #F57C00; margin: 0 0 10px 0; font-size: 1.2rem;">
+                        🎯 Aligns with Your Vision
+                    </h3>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>You said: "Living document that evolves with the industry"</li>
+                        <li>Option 1 makes evolution <strong>immediately visible</strong> on homepage</li>
+                        <li>No clicking required to see what's actively changing</li>
+                    </ul>
+                </div>
+                
+                <div class="tldr-box" style="border-color: #FDC500;">
+                    <h3 style="color: #F57C00; margin: 0 0 10px 0; font-size: 1.2rem;">
+                        👥 Emphasizes Community Energy
+                    </h3>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Contributor avatars provide <strong>social proof</strong></li>
+                        <li>Activity counts create <strong>momentum</strong></li>
+                        <li>Recognition encourages more participation</li>
+                    </ul>
+                </div>
+                
+                <div class="tldr-box" style="border-color: #FDC500;">
+                    <h3 style="color: #F57C00; margin: 0 0 10px 0; font-size: 1.2rem;">
+                        🟡 Addresses Vish's Feedback
+                    </h3>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Original concern: "lost some of the nice design elements...like the yellow"</li>
+                        <li>Yellow activity badges add visual interest</li>
+                        <li>Yellow hover states on git info sections</li>
+                    </ul>
+                </div>
+                
+                <div class="tldr-box" style="border-color: #FDC500;">
+                    <h3 style="color: #F57C00; margin: 0 0 10px 0; font-size: 1.2rem;">
+                        🚀 Leverages Your Work
+                    </h3>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>You already built <code>community-activity.js</code></li>
+                        <li>GitHub API integration is complete</li>
+                        <li>Visual status system (Original/Active/Updated) ready to use</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); border-radius: 8px;">
+                <p style="margin: 0; font-style: italic; color: #666; text-align: center;">
+                    "The best interface is the one that shows what matters most, right where people are looking."
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="export-modal" id="exportModal">
+        <div class="export-content">
+            <h3>📋 Export Your Decision</h3>
+            <p>Copy this markdown to share your decision with Claude:</p>
+            <textarea class="export-textarea" id="exportText" readonly></textarea>
+            <div class="export-actions">
+                <button class="btn btn-primary" onclick="copyExport()">📋 Copy to Clipboard</button>
+                <button class="btn btn-secondary" onclick="closeExport()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // State management
+        let currentState = {
+            option: '1',
+            view: 'desktop',
+            yellowLevel: 1,
+            freshness: 'mixed'
+        };
+        
+        // Initialize event listeners
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', handleButtonClick);
+        });
+        
+        document.getElementById('yellowSlider').addEventListener('input', handleYellowChange);
+        
+        function handleButtonClick(e) {
+            const btn = e.target;
+            const group = btn.parentElement;
+            
+            // Remove active from siblings
+            group.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update state
+            if (btn.dataset.option) {
+                currentState.option = btn.dataset.option;
+                updateOption();
+            } else if (btn.dataset.view) {
+                currentState.view = btn.dataset.view;
+                updateView();
+            } else if (btn.dataset.fresh) {
+                currentState.freshness = btn.dataset.fresh;
+                updateFreshness();
+            }
+        }
+        
+        function handleYellowChange(e) {
+            currentState.yellowLevel = parseInt(e.target.value);
+            updateYellow();
+        }
+        
+        function updateOption() {
+            const mockHomepage = document.getElementById('mockHomepage');
+            const currentOptionText = document.getElementById('currentOption');
+            
+            // Hide all option content
+            document.querySelectorAll('.option-1-content, .option-2-content, .option-3-content').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Show selected option content
+            document.querySelectorAll(`.option-${currentState.option}-content`).forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            // Update header text
+            const optionTexts = {
+                '1': 'Option 1: Inline Git Info',
+                '2': 'Option 2: Separate Section',
+                '3': 'Option 3: Detail Pages Only'
+            };
+            currentOptionText.textContent = optionTexts[currentState.option];
+            
+            // Show/hide update badges for option 1
+            document.querySelectorAll('.update-badge').forEach(badge => {
+                badge.style.display = currentState.option === '1' ? 'block' : 'none';
+            });
+        }
+        
+        function updateView() {
+            const mockHomepage = document.getElementById('mockHomepage');
+            if (currentState.view === 'mobile') {
+                mockHomepage.classList.add('mobile-view');
+            } else {
+                mockHomepage.classList.remove('mobile-view');
+            }
+        }
+        
+        function updateYellow() {
+            const gitInfos = document.querySelectorAll('.git-info');
+            gitInfos.forEach(info => {
+                info.classList.remove('style-yellow', 'style-none');
+                if (currentState.yellowLevel === 0) {
+                    // Minimal yellow - no special styling
+                } else if (currentState.yellowLevel === 1) {
+                    // Medium yellow - subtle yellow border
+                    info.style.borderTop = '2px solid #FDC500';
+                    info.style.background = 'rgba(253, 197, 0, 0.05)';
+                } else if (currentState.yellowLevel === 2) {
+                    // Maximum yellow - full yellow background
+                    info.classList.add('style-yellow');
+                    info.style.borderTop = '';
+                    info.style.background = '';
+                }
+            });
+            
+            // Update badge colors
+            document.querySelectorAll('.update-badge').forEach(badge => {
+                if (currentState.yellowLevel === 2) {
+                    badge.style.background = '#FDC500';
+                    badge.style.color = '#000';
+                } else if (currentState.yellowLevel === 1) {
+                    badge.style.background = '#79589F';
+                    badge.style.color = 'white';
+                    badge.style.border = '2px solid #FDC500';
+                } else {
+                    badge.style.background = '#0cce6b';
+                    badge.style.color = 'white';
+                    badge.style.border = 'none';
+                }
+            });
+        }
+        
+        function updateFreshness() {
+            const updateTimes = {
+                'config': 'Last updated 2 weeks ago',
+                'codebase': 'Last updated 13 years ago',
+                'dependencies': 'Last updated 13 years ago',
+                'backing-services': 'Last updated 1 month ago'
+            };
+            
+            const freshTimes = {
+                'config': 'Last updated 2 days ago',
+                'codebase': 'Last updated 1 week ago',
+                'dependencies': 'Last updated 3 days ago',
+                'backing-services': 'Last updated yesterday'
+            };
+            
+            const staleTimes = {
+                'config': 'Last updated 13 years ago',
+                'codebase': 'Last updated 13 years ago',
+                'dependencies': 'Last updated 13 years ago',
+                'backing-services': 'Last updated 13 years ago'
+            };
+            
+            let times = updateTimes;
+            if (currentState.freshness === 'all-fresh') times = freshTimes;
+            if (currentState.freshness === 'all-stale') times = staleTimes;
+            
+            document.querySelectorAll('.factor-card').forEach(card => {
+                const factor = card.dataset.factor;
+                const timeEl = card.querySelector('.update-time');
+                if (timeEl) {
+                    timeEl.textContent = times[factor];
+                    
+                    // Update color based on freshness
+                    if (times[factor].includes('years')) {
+                        timeEl.style.color = '#666';
+                    } else if (times[factor].includes('days') || times[factor].includes('yesterday')) {
+                        timeEl.style.color = '#0cce6b';
+                    } else {
+                        timeEl.style.color = '#666';
+                    }
+                }
+                
+                // Show/hide contributors for stale items
+                const contributors = card.querySelector('.contributor-avatars');
+                if (contributors) {
+                    contributors.style.display = times[factor].includes('years') ? 'none' : 'inline-flex';
+                }
+                
+                // Update badges
+                const badge = card.querySelector('.update-badge');
+                if (badge && currentState.option === '1') {
+                    badge.style.display = times[factor].includes('years') ? 'none' : 'block';
+                }
+            });
+        }
+        
+        function exportDecision() {
+            const optionNames = {
+                '1': 'Option 1 - Inline Git Info',
+                '2': 'Option 2 - Separate Section',
+                '3': 'Option 3 - Detail Pages Only'
+            };
+            
+            const yellowDescriptions = ['Minimal', 'Balanced', 'Maximum'];
+            
+            const exportText = `## Git History Decision
+
+**Selected: ${optionNames[currentState.option]}**
+
+### Configuration Tested:
+- View: ${currentState.view === 'desktop' ? 'Desktop' : 'Mobile'}
+- Yellow Level: ${yellowDescriptions[currentState.yellowLevel]}
+- Freshness: ${currentState.freshness === 'mixed' ? 'Mixed (realistic)' : currentState.freshness === 'all-fresh' ? 'All Fresh' : 'All Stale'}
+
+### Key Reasons:
+${currentState.option === '1' ? `- ✅ Shows "living document" status immediately
+- ✅ Adds yellow visual elements (addresses Vish's feedback)
+- ✅ Creates energy and activity on homepage
+- ✅ Social proof with contributor avatars` : ''}
+${currentState.option === '2' ? `- ✅ Keeps factor cards clean and scannable
+- ✅ Provides chronological activity feed
+- ✅ Familiar blog-like pattern for updates
+- ✅ Good balance of information density` : ''}
+${currentState.option === '3' ? `- ✅ Minimal homepage changes
+- ✅ Progressive disclosure pattern
+- ✅ Detailed history for engaged users
+- ✅ Best performance on homepage` : ''}
+
+### Trade-offs Accepted:
+${currentState.option === '1' ? `- Cards are busier (mitigated by good visual hierarchy)
+- Need responsive design for mobile
+- More complex implementation` : ''}
+${currentState.option === '2' ? `- Activity less immediately visible
+- Requires scrolling to see updates
+- May be overlooked by some visitors` : ''}
+${currentState.option === '3' ? `- No activity visible on homepage
+- Misses "living document" messaging
+- Less encouragement for contributions` : ''}
+
+### Implementation Notes:
+${currentState.option === '1' ? `- Use ${currentState.yellowLevel === 2 ? 'yellow background' : currentState.yellowLevel === 0 ? 'minimal yellow accents' : 'balanced yellow highlights'} for git info
+- Show max 3 contributor avatars
+- ${currentState.view === 'mobile' ? 'Simplify layout on mobile - maybe just "Updated 2w ago"' : 'Full layout works well on desktop'}
+- Add hover effects to show more details` : ''}
+${currentState.option === '2' ? `- Place "Recent Updates" after factor grid
+- Show last 5-7 updates chronologically
+- Include commit messages for context
+- Link to full changelog` : ''}
+${currentState.option === '3' ? `- Add "Revision History" section to factor pages
+- Show full contributor list
+- Include detailed commit messages
+- Link to GitHub history` : ''}
+
+---
+*Decision made using interactive mockup on ${new Date().toLocaleDateString()}*`;
+            
+            document.getElementById('exportText').value = exportText;
+            document.getElementById('exportModal').style.display = 'block';
+        }
+        
+        function copyExport() {
+            const textarea = document.getElementById('exportText');
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        }
+        
+        function closeExport() {
+            document.getElementById('exportModal').style.display = 'none';
+        }
+        
+        // Initialize
+        updateOption();
+        updateView();
+        updateYellow();
+        updateFreshness();
+    </script>
+</body>
+</html>

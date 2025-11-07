@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The Twelve-Factor App</title>
+  <meta name="description" content="A methodology for building modern, scalable, maintainable software-as-a-service apps.">
+  <meta name="author" content="Adam Wiggins">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="http://localhost:3001/">
+  <!-- alternate links would go here -->
+  <link rel="shortcut icon" href="/images/favicon.ico">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/layout.css" type="text/css" media="all" />
+
+</head>
+<body>
+  <!-- Skip to content link for accessibility -->
+  <a href="#main" class="skip-to-content">Skip to main content</a>
+
+  <header class="site-header" role="banner">
+    <div class="site-header-bottom">
+      <div class="container-fluid">
+
+        <nav class="navbar navbar-expand-xl" aria-label="Primary">
+          <div class="navbar-content d-flex align-items-center justify-content-between w-100">
+            <a href="/" class="navbar-brand" rel="home">
+              <img src="/assets/images/Logos/twelve-factor-logo.svg" alt="The Twelve-Factor App" height="40">
+            </a>
+
+            <div id="primary-nav" class="primary-nav collapse navbar-collapse col-6 col-xl-10">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/community" class="nav-link">Community</a></li>
+                <li class="nav-item"><a href="/blog" class="nav-link">Blog</a></li>
+                <li class="nav-item"><a href="https://github.com/twelve-factor/twelve-factor" target="_blank" class="nav-link">GitHub</a></li>
+              </ul>
+            </div> <!-- /.collapse navbar-collapse -->
+          </div> <!-- /.navbar-content -->
+        </nav> <!-- /.navbar -->
+
+      </div> <!-- /.container-fluid -->
+    </div> <!-- /.site-header-bottom -->
+
+  </header> <!-- /.site-header -->
+
+  {% block content %}{% endblock content %}
+
+  {% include "footer_refined.html" %}
+
+  <!-- JavaScript -->
+  <script src="/assets/js/register-sw.js"></script>
+  
+  <!-- Enhanced community activity for home page -->
+  <script src="/assets/js/community-activity-enhanced.js"></script>
+
+</body>
+</html>

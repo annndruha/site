@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}">
+<head>
+    <meta charset="utf-8">
+    <title>The Twelve-Factor App</title>
+    <meta name="description" content="A methodology for building modern, scalable, maintainable software-as-a-service apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/layout.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>The Twelve-Factor App</h1>
+    </header>
+    
+    <main>
+        <section id="intro">
+            {{ intro | safe }}
+        </section>
+        
+        <section id="background">
+            {{ background | safe }}
+        </section>
+        
+        <section id="factors">
+            <h2>The Twelve Factors</h2>
+            <ol>
+            {% for factor in factors %}
+                <li><a href="/{{ factor }}">{{ factor | replace(from="-", to=" ") | title }}</a></li>
+            {% endfor %}
+            </ol>
+        </section>
+        
+        <section id="who">
+            {{ who | safe }}
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 The Twelve-Factor App</p>
+    </footer>
+</body>
+</html>

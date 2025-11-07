@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main id="content">
+  <article>
+    <header class="pageblock pageblock--hero">
+      <div class="pageblock__inner">
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-12 col-lg-8">
+              <div class="hero__content text-center">
+                <h1>{{ post.title }}</h1>
+                <div class="post-meta">
+                  {% if post.author %}
+                  <span class="post-meta__item">By {{ post.author.name }}</span>
+                  <span class="post-meta__item post-meta__item--separator">•</span>
+                  {% endif %}
+                  <span class="post-meta__item">{{ post.date }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="pageblock pageblock--content">
+      <div class="pageblock__inner">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <div class="content-block">
+                {{ post.content_html | safe }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% if post.author %}
+    <section class="pageblock pageblock--author bg-color-grey-light">
+      <div class="pageblock__inner">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <div class="author-bio">
+                <div class="author-bio__image">
+                  <img src="/images/bios/{{ post.author_id }}.jpg" alt="{{ post.author.name }}" />
+                </div>
+                <div class="author-bio__content">
+                  <h3>About {{ post.author.name }}</h3>
+                  {% if post.author.description %}
+                  <p>{{ post.author.description }}</p>
+                  {% endif %}
+                  {% if post.author.github_username %}
+                  <p><a href="https://github.com/{{ post.author.github_username }}" target="_blank">GitHub Profile</a></p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="pageblock pageblock--navigation">
+      <div class="pageblock__inner">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <nav class="post-navigation">
+                <a href="/blog" class="btn btn-outline-primary">← Back to Blog</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+</main>
+{% endblock %}

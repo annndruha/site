@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Community - The Twelve-Factor App{% endblock %}
+
+{% block content %}
+<main class="community-page">
+  <!-- Hero Section - White with Yellow Border -->
+  <section class="community-hero">
+    <div class="container">
+      <h1>Join the Twelve-Factor Community</h1>
+      <p class="lead">Connect with developers worldwide to discuss and evolve the twelve-factor methodology</p>
+      <div class="hero-actions">
+        <a href="https://discord.gg/twelve-factor" class="btn btn-primary">
+          <i class="bi bi-discord"></i> Join Discord
+        </a>
+        <a href="https://github.com/twelve-factor/twelve-factor" class="btn btn-outline-secondary">
+          <i class="bi bi-github"></i> Contribute on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="community-stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="contributorCount">
+            <span class="loading-spinner"></span>
+          </div>
+          <div class="stat-label">Contributors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="issueCount">
+            <span class="loading-spinner"></span>
+          </div>
+          <div class="stat-label">Open Issues</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="starCount">
+            <span class="loading-spinner"></span>
+          </div>
+          <div class="stat-label">GitHub Stars</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Activity Section -->
+  <section class="community-activity">
+    <div class="container">
+      <h2>Recent Activity</h2>
+      <div class="activity-feed" id="activityFeed">
+        <div class="activity-loading">
+          <span class="loading-spinner"></span>
+          <p>Loading community activity...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contribution Section -->
+  <section class="community-contribute">
+    <div class="container">
+      <h2>Ways to Contribute</h2>
+      <div class="contribute-grid">
+        <div class="contribute-card">
+          <div class="contribute-icon">
+            <i class="bi bi-translate"></i>
+          </div>
+          <h3>Translate</h3>
+          <p>Help make the twelve-factor methodology accessible to developers worldwide by contributing translations.</p>
+          <a href="https://github.com/twelve-factor/twelve-factor#contributing-translations" class="contribute-link">Learn how →</a>
+        </div>
+        <div class="contribute-card">
+          <div class="contribute-icon">
+            <i class="bi bi-bug"></i>
+          </div>
+          <h3>Report Issues</h3>
+          <p>Found a problem or have a suggestion? Open an issue to help us improve the documentation.</p>
+          <a href="https://github.com/twelve-factor/twelve-factor/issues/new" class="contribute-link">Open issue →</a>
+        </div>
+        <div class="contribute-card">
+          <div class="contribute-icon">
+            <i class="bi bi-code-slash"></i>
+          </div>
+          <h3>Submit PRs</h3>
+          <p>Contribute code improvements, fix typos, or enhance the site's functionality through pull requests.</p>
+          <a href="https://github.com/twelve-factor/twelve-factor/pulls" class="contribute-link">View PRs →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meeting Section -->
+  <section class="community-meetings">
+    <div class="container">
+      <h2>Community Meetings</h2>
+      <div class="meeting-info">
+        <div class="meeting-card">
+          <div class="meeting-icon">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+          <div class="meeting-details">
+            <h3>Weekly Community Call</h3>
+            <p>Join us every Thursday at 3:00 PM UTC to discuss the evolution of the twelve-factor methodology.</p>
+            <div class="meeting-meta">
+              <span class="meeting-time"><i class="bi bi-clock"></i> Thursdays, 3:00 PM UTC</span>
+              <span class="meeting-platform"><i class="bi bi-camera-video"></i> Google Meet</span>
+            </div>
+            <a href="https://meet.google.com/twelve-factor-weekly" class="btn btn-primary btn-sm">Join Next Meeting</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guidelines Section -->
+  <section class="community-guidelines">
+    <div class="container">
+      <h2>Community Guidelines</h2>
+      <div class="guidelines-content">
+        <p>The Twelve-Factor community is dedicated to providing a welcoming, inclusive experience for everyone. We expect all community members to:</p>
+        <ul>
+          <li>Be respectful and considerate in all interactions</li>
+          <li>Welcome newcomers and help them get oriented</li>
+          <li>Focus on constructive criticism and collaborative problem-solving</li>
+          <li>Respect differing viewpoints and experiences</li>
+        </ul>
+        <p>For full details, please read our <a href="https://github.com/twelve-factor/twelve-factor/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Community Activity Script -->
+<script src="/assets/js/community-activity.js"></script>
+{% endblock %}

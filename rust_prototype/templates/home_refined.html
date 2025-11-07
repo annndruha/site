@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+  <section class="intro">
+    <h1>The Twelve-Factor App</h1>
+    <p class="lead">In the modern era, software is commonly delivered as a service: called web apps, or software-as-a-service. The twelve-factor app is a methodology for building software-as-a-service apps.</p>
+  </section>
+
+  <section class="factors-section">
+    <h1>The Twelve Factors</h1>
+    
+    <article class="factor">
+      <div class="time-indicator" data-days="2">2 days ago</div>
+      <h2><a href="/codebase">I. Codebase</a></h2>
+      <h3>One codebase tracked in revision control, many deploys</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/dependencies">II. Dependencies</a></h2>
+      <h3>Explicitly declare and isolate dependencies</h3>
+    </article>
+
+    <article class="factor">
+      <div class="time-indicator fading" data-days="6">6 days ago</div>
+      <h2><a href="/config">III. Config</a></h2>
+      <h3>Store config in the environment</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/backing-services">IV. Backing services</a></h2>
+      <h3>Treat backing services as attached resources</h3>
+    </article>
+
+    <article class="factor">
+      <div class="time-indicator" data-days="1">1 day ago</div>
+      <h2><a href="/build-release-run">V. Build, release, run</a></h2>
+      <h3>Strictly separate build and run stages</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/processes">VI. Processes</a></h2>
+      <h3>Execute the app as one or more stateless processes</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/port-binding">VII. Port binding</a></h2>
+      <h3>Export services via port binding</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/concurrency">VIII. Concurrency</a></h2>
+      <h3>Scale out via the process model</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/disposability">IX. Disposability</a></h2>
+      <h3>Maximize robustness with fast startup and graceful shutdown</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/dev-prod-parity">X. Dev/prod parity</a></h2>
+      <h3>Keep development, staging, and production as similar as possible</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/logs">XI. Logs</a></h2>
+      <h3>Treat logs as event streams</h3>
+    </article>
+
+    <article class="factor">
+      <h2><a href="/admin-processes">XII. Admin processes</a></h2>
+      <h3>Run admin/management tasks as one-off processes</h3>
+    </article>
+  </section>
+</div>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="content">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> > {{ factor_title }}
+    </nav>
+    
+    <!-- Factor header -->
+    <h1>{{ factor_roman }}. {{ factor_title }}</h1>
+    <p class="subtitle">{{ factor_subtitle }}</p>
+    
+    <!-- Main content -->
+    <div class="factor-content">
+      {{ content | safe }}
+    </div>
+    
+    <!-- Improve this factor CTA -->
+    <section class="factor-cta">
+      <h2>Help evolve this factor</h2>
+      <p>The twelve-factor methodology is evolving. This factor was originally published in {{ original_year | default(value="2011") }}{% if last_updated %} and last updated {{ last_updated }}{% endif %}.</p>
+      
+      <div class="cta-options">
+        {% if discussion_url %}
+        <a href="{{ discussion_url }}" class="btn btn-primary" target="_blank">
+          <i class="bi bi-chat-dots"></i>
+          Join the discussion
+        </a>
+        <p class="cta-note">{{ participant_count | default(value="Several") }} contributors are discussing improvements to this factor.</p>
+        {% else %}
+        <a href="{{ github_repo }}/issues/new?title=[{{ factor_title }}] " class="btn btn-primary" target="_blank">
+          <i class="bi bi-lightbulb"></i>
+          Propose an improvement
+        </a>
+        <p class="cta-note">Have ideas for modernizing this factor? Start a discussion with the community.</p>
+        {% endif %}
+        
+        <a href="{{ github_repo }}/edit/main/content/en/{{ factor_slug }}.md" class="btn btn-secondary" target="_blank">
+          <i class="bi bi-pencil"></i>
+          Edit on GitHub
+        </a>
+      </div>
+    </section>
+    
+    <!-- Navigation -->
+    <nav class="factor-nav" aria-label="Factor navigation">
+      <div class="nav-wrapper">
+        {% if prev_factor %}
+        <a href="/{{ prev_factor.slug }}" class="nav-prev">
+          &laquo; {{ prev_factor.title }}
+        </a>
+        {% endif %}
+        {% if next_factor %}
+        <a href="/{{ next_factor.slug }}" class="nav-next">
+          {{ next_factor.title }} &raquo;
+        </a>
+        {% endif %}
+      </div>
+    </nav>
+  </div>
+</div>
+<script src="/assets/js/community-activity.js" defer></script>
+{% endblock content %}

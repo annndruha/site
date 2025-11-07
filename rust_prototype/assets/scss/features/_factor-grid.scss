@@ -1,0 +1,208 @@
+// Factor Grid with Numeral Icons
+.factor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: oms-px-to-rem(30px);
+    padding: oms-px-to-rem(40px) 0;
+    margin: 0;
+    list-style: none;
+    
+    @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: oms-px-to-rem(40px);
+    }
+    
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    @include media-breakpoint-up(xl) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.factor-card {
+    display: flex;
+    flex-direction: column;
+    padding: oms-px-to-rem(20px);
+    border-radius: oms-px-to-rem(8px);
+    transition: all 0.3s ease;
+    background: $bg-color-light-gray;
+    text-decoration: none;
+    color: $text-body-color;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        color: $text-body-color;
+        
+        .factor-card__icon {
+            transform: scale(1.05);
+        }
+        
+        .factor-card__title {
+            color: $color-purple;
+        }
+    }
+    
+    &__icon {
+        width: oms-px-to-rem(48px);
+        height: oms-px-to-rem(48px);
+        margin-bottom: oms-px-to-rem(15px);
+        transition: transform 0.3s ease;
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+    
+    &__title {
+        @include webfont-medium();
+        font-size: oms-px-to-rem(18px);
+        margin-bottom: oms-px-to-rem(8px);
+        color: $text-heading-color;
+        transition: color 0.3s ease;
+    }
+    
+    &__description {
+        font-size: oms-px-to-rem(14px);
+        line-height: 1.5;
+        color: lighten($text-body-color, 20%);
+        margin: 0;
+    }
+}
+
+// Fallback for ordered list display
+.factor-list {
+    counter-reset: factor-counter;
+    list-style: none;
+    padding: 0;
+    margin: oms-px-to-rem(40px) 0;
+    
+    li {
+        position: relative;
+        padding-left: oms-px-to-rem(60px);
+        margin-bottom: oms-px-to-rem(20px);
+        
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: oms-px-to-rem(40px);
+            height: oms-px-to-rem(40px);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        // Use numeral icons for each factor - manually set each one
+        &:nth-child(1):before { background-image: url('/assets/images/Icons/icon-numeral-01.svg'); }
+        &:nth-child(2):before { background-image: url('/assets/images/Icons/icon-numeral-02.svg'); }
+        &:nth-child(3):before { background-image: url('/assets/images/Icons/icon-numeral-03.svg'); }
+        &:nth-child(4):before { background-image: url('/assets/images/Icons/icon-numeral-04.svg'); }
+        &:nth-child(5):before { background-image: url('/assets/images/Icons/icon-numeral-05.svg'); }
+        &:nth-child(6):before { background-image: url('/assets/images/Icons/icon-numeral-06.svg'); }
+        &:nth-child(7):before { background-image: url('/assets/images/Icons/icon-numeral-07.svg'); }
+        &:nth-child(8):before { background-image: url('/assets/images/Icons/icon-numeral-08.svg'); }
+        &:nth-child(9):before { background-image: url('/assets/images/Icons/icon-numeral-09.svg'); }
+        &:nth-child(10):before { background-image: url('/assets/images/Icons/icon-numeral-10.svg'); }
+        &:nth-child(11):before { background-image: url('/assets/images/Icons/icon-numeral-11.svg'); }
+        &:nth-child(12):before { background-image: url('/assets/images/Icons/icon-numeral-12.svg'); }
+        
+        a {
+            display: inline-block;
+            color: $text-body-color;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            
+            strong {
+                color: $color-purple;
+            }
+            
+            &:hover {
+                transform: translateX(3px);
+                
+                strong {
+                    color: $color-dark-purple;
+                }
+            }
+        }
+    }
+}
+
+// Factor Cards (Community Homepage) with Numeral Icons
+.factor-card {
+    position: relative; // For absolute positioning of time indicators
+    
+    .factor-number {
+        // Hide the Roman numeral text
+        text-indent: -9999px;
+        overflow: hidden;
+        // Set size for icon
+        width: oms-px-to-rem(48px);
+        height: oms-px-to-rem(48px);
+        // Add icon as background
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+    
+    // Use nth-child to assign correct numeral icon to each card
+    &:nth-child(1) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-01.svg'); }
+    &:nth-child(2) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-02.svg'); }
+    &:nth-child(3) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-03.svg'); }
+    &:nth-child(4) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-04.svg'); }
+    &:nth-child(5) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-05.svg'); }
+    &:nth-child(6) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-06.svg'); }
+    &:nth-child(7) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-07.svg'); }
+    &:nth-child(8) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-08.svg'); }
+    &:nth-child(9) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-09.svg'); }
+    &:nth-child(10) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-10.svg'); }
+    &:nth-child(11) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-11.svg'); }
+    &:nth-child(12) .factor-number { background-image: url('/assets/images/Icons/icon-numeral-12.svg'); }
+}
+
+// Time Indicators for Activity (Option C: Fading)
+.time-indicator {
+    position: absolute;
+    top: oms-px-to-rem(8px);
+    right: oms-px-to-rem(8px);
+    font-size: oms-px-to-rem(12px);
+    font-weight: 500;
+    padding-left: oms-px-to-rem(12px);
+    // Use darker gray to maintain contrast even when fading
+    color: #444; // 9.73:1 contrast ratio - exceeds WCAG AAA
+    
+    // Yellow dot as visual accent
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: oms-px-to-rem(6px);
+        height: oms-px-to-rem(6px);
+        background: $color-yellow;
+        border-radius: 50%;
+    }
+    
+    // Fading approach that maintains WCAG compliance
+    &.fading {
+        // Use darker gray that still passes AA when faded
+        color: #666; // 5.74:1 contrast - passes WCAG AA
+        
+        &::before {
+            opacity: 0.5;
+        }
+    }
+    
+    // Hidden state for old content (8+ days)
+    &.hidden {
+        display: none;
+    }
+}

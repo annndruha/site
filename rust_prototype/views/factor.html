@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}">
+<head>
+    <meta charset="utf-8">
+    <title>{{ factor | replace(from="-", to=" ") | title }} - The Twelve-Factor App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/layout.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/">The Twelve-Factor App</a></h1>
+    </header>
+    
+    <nav class="factor-nav">
+        {% if prev_factor %}
+        <a href="/{{ prev_factor }}" class="prev">&larr; {{ prev_factor | replace(from="-", to=" ") | title }}</a>
+        {% endif %}
+        
+        {% if next_factor %}
+        <a href="/{{ next_factor }}" class="next">{{ next_factor | replace(from="-", to=" ") | title }} &rarr;</a>
+        {% endif %}
+    </nav>
+    
+    <main>
+        <article>
+            {{ content | safe }}
+        </article>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 The Twelve-Factor App</p>
+    </footer>
+</body>
+</html>

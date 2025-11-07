@@ -1,0 +1,72 @@
+// Factor pages specific styles
+
+section.concrete {
+  background: #ccc;
+  margin-top: 24pt;
+  padding-top: 24pt;
+  padding-bottom: 32pt;
+  border-top: 8pt solid #aaa;
+
+  h1 {
+    font-size: 28pt;
+    margin-bottom: 32pt;
+    text-align: center;
+  }
+
+  h2 {
+    margin-top: 12pt;
+    
+    a {
+      text-decoration: none;
+      color: #000;
+      
+      &:hover {
+        border-bottom: 2px dashed #444;
+        color: #337;
+      }
+    }
+  }
+
+  h3 {
+    color: #333;
+    font-weight: normal;
+  }
+}
+
+section#factor {
+  h2 {
+    font-size: 32pt;
+    line-height: 36pt;
+    font-weight: bold;
+  }
+}
+
+// Navigation styles
+nav {
+  #next {
+    float: right;
+  }
+  
+  #prev {
+    float: left;
+  }
+  
+  #locales {
+    text-align: center;
+    margin-bottom: 24pt;
+    
+    a {
+      color: #666;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    span {
+      color: #333;
+      font-weight: bold;
+    }
+  }
+}
